@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <title>DietPi Terminal</title>
+    <link rel="stylesheet" href="xterm-5.5.0.css" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            overflow: hidden;
+            font-family: monospace, "DejaVu Sans Mono", "Courier New";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+            touch-action: none;
+            overscroll-behavior: none;
+            -webkit-overscroll-behavior: none;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+        #terminal-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            touch-action: pan-x pan-y;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior: none;
+        }
+        /* Hide scrollbars on container if not needed */
+        #terminal-container::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        .xterm {
+            padding: 0;
+            height: 100%;
+        }
+        /* Lock viewport scroll styling and touch handling - dynamic scrollbar */
+        .xterm .xterm-viewport {
+            background-color: #0d1117 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            cursor: default;
+            position: absolute;
+            right: 0;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            touch-action: pan-y !important;
+            overscroll-behavior: none !important;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(63, 185, 80, 0.4) transparent;
+        }
+        /* Hide scrollbar completely when terminal content fits the screen */
+        .xterm .xterm-viewport.no-scroll {
+            overflow-y: hidden !important;
+        }
+        .xterm .xterm-viewport.no-scroll::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+        /* Custom slim scrollbars for xterm viewport only when scrolling is needed */
+        .xterm .xterm-viewport::-webkit-scrollbar {
+            width: 4px;
+            height: 0px;
+        }
+        .xterm .xterm-viewport::-webkit-scrollbar-track {
+            background: transparent !important;
+        }
+        .xterm .xterm-viewport::-webkit-scrollbar-thumb {
+            background-color: rgba(63, 185, 80, 0.4);
+            border-radius: 4px;
+        }
+        .xterm .xterm-viewport::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(63, 185, 80, 0.7);
+        }
+    </style>
+    <script src="xterm-5.5.0.js"></script>
+    <script src="xterm-addon-fit-0.10.0.js"></script>
+</head>
+<body>
+    <div id="terminal-container"></div>
+    <script>
+        let term = null;
+        let fitAddon = null;
+        let resizeDebounceTimer = null;
+        let scrollbarCheckRaf = null;
+
+        function updateScrollbarState() {
+            if (!term) return;
+            const container = document.getElementById('terminal-container');
+            if (!container) return;
+            const viewport = container.querySelector('.xterm-viewport');
+            if (!viewport) return;
+
+            // Check if buffer has more lines than viewport rows (i.e. scrollable)
+            const buffer = term.buffer && term.buffer.active;
+            const hasScrollback = buffer && (buffer.baseY > 0 || buffer.length > term.rows);
+            const isScrollable = hasScrollback || (viewport.scrollHeight > viewport.clientHeight + 4);
+
+            if (isScrollable) {
+                viewport.classList.remove('no-scroll');
+            } else {
+                viewport.classList.add('no-scroll');
+            }
+        }
+
+        function scheduleScrollbarCheck() {
+            if (scrollbarCheckRaf) return;
+            scrollbarCheckRaf = requestAnimationFrame(() => {
+                scrollbarCheckRaf = null;
+                updateScrollbarState();
+            });
+        }
+
+        function fitTerminal() {
+            if (!term || !fitAddon) return;
+            const container = document.getElementById('terminal-container');
+            if (!container) return;
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            if (width <= 0 || height <= 0) return;
+
+            // DietPi whiptail/dialog and curses tools require AT LEAST 80 columns and 24 rows
+            // to display without line-wrapping and coordinate desync.
+            // In monospace fonts with letterSpacing 0, charWidth is ~0.605 * fontSize.
+            // Calculate optimal font size so that at least 80 columns fit the available width:
+            const optimalFs = Math.max(7.0, Math.min(14.0, Math.floor((width / 48.5) * 10) / 10));
+            if (Math.abs(term.options.fontSize - optimalFs) > 0.05) {
+                term.options.fontSize = optimalFs;
+            }
+
+            fitAddon.fit();
+
+            // Enforce hard safety bounds: PTY cols must be at least 80, rows at least 24
+            const safeCols = Math.max(80, term.cols);
+            const safeRows = Math.max(24, term.rows);
+            if (term.cols !== safeCols || term.rows !== safeRows) {
+                term.resize(safeCols, safeRows);
+            }
+            scheduleScrollbarCheck();
+        }
+
+        function initTerminal() {
+            if (term) return;
+            try {
+                term = new Terminal({
+                    cursorBlink: true,
+                    cursorStyle: 'block',
+                    fontFamily: 'monospace, "DejaVu Sans Mono", "Courier New"',
+                    fontSize: 8,
+                    lineHeight: 1.0,
+                    letterSpacing: 0,
+                    scrollback: 5000,
+                    convertEol: true,
+                    allowProposedApi: true,
+                    theme: {
+                        background: '#0d1117',
+                        foreground: '#c9d1d9',
+                        cursor: '#2ea043',
+                        cursorAccent: '#0d1117',
+                        selectionBackground: 'rgba(46, 160, 67, 0.35)',
+                        selectionForeground: '#ffffff',
+                        black: '#161b22',
+                        red: '#ff7b72',
+                        green: '#3fb950',
+                        yellow: '#d29922',
+                        blue: '#58a6ff',
+                        magenta: '#bc8cff',
+                        cyan: '#39c5cf',
+                        white: '#b1bac4',
+                        brightBlack: '#6e7681',
+                        brightRed: '#ffa198',
+                        brightGreen: '#56d364',
+                        brightYellow: '#e3b341',
+                        brightBlue: '#79c0ff',
+                        brightMagenta: '#d2a8ff',
+                        brightCyan: '#56d4dd',
+                        brightWhite: '#f0f6fc'
+                    }
+                });
+
+                fitAddon = new FitAddon.FitAddon();
+                term.loadAddon(fitAddon);
+
+                const container = document.getElementById('terminal-container');
+                term.open(container);
+
+                // Listen to scroll events to dynamically update scrollbar visibility
+                if (term.onScroll) {
+                    term.onScroll(() => scheduleScrollbarCheck());
+                }
+                if (term.onRender) {
+                    term.onRender(() => scheduleScrollbarCheck());
+                }
+
+                term.onResize((dimensions) => {
+                    const safeCols = Math.max(80, dimensions.cols);
+                    const safeRows = Math.max(24, dimensions.rows);
+                    if (window.AndroidTerminal && typeof window.AndroidTerminal.onResize === 'function') {
+                        window.AndroidTerminal.onResize(safeCols, safeRows);
+                    }
+                    scheduleScrollbarCheck();
+                });
+
+                function syncTerminalDimensions(force) {
+                    if (term && window.AndroidTerminal && typeof window.AndroidTerminal.onResize === 'function') {
+                        const safeCols = Math.max(80, term.cols);
+                        const safeRows = Math.max(24, term.rows);
+                        window.AndroidTerminal.onResize(safeCols, safeRows, !!force);
+                    }
+                }
+                window.syncTerminalDimensions = syncTerminalDimensions;
+
+                function isApplicationCursorMode() {
+                    const decModes = term._core && term._core.coreService && term._core.coreService.decPrivateModes;
+                    return !!(
+                        (term.modes && (term.modes.applicationCursorKeysMode || term.modes.applicationCursorMode)) ||
+                        (decModes && (decModes.applicationCursorKeys || decModes.applicationCursorKeysMode || decModes.applicationCursorMode)) ||
+                        (term._core && term._core._modes && term._core._modes.applicationCursorMode)
+                    );
+                }
+
+                function isApplicationKeypadMode() {
+                    const decModes = term._core && term._core.coreService && term._core.coreService.decPrivateModes;
+                    return !!(
+                        (term.modes && term.modes.applicationKeypadMode) ||
+                        (decModes && (decModes.applicationKeypad || decModes.applicationKeypadMode)) ||
+                        (term._core && term._core._modes && term._core._modes.applicationKeypadMode)
+                    );
+                }
+
+                term.onData((data) => {
+                    let toSend = data;
+
+                    // If xterm emitted raw CSI cursor sequences [A/[B/[C/[D while in applicationCursorMode,
+                    // transform them to SS3 sequences OA/OB/OC/OD so TUIs like Midnight Commander (mc),
+                    // nano, and htop receive the expected cursor commands.
+                    if (isApplicationCursorMode()) {
+                        if (toSend === '\x1b[A') toSend = '\x1bOA';
+                        else if (toSend === '\x1b[B') toSend = '\x1bOB';
+                        else if (toSend === '\x1b[C') toSend = '\x1bOC';
+                        else if (toSend === '\x1b[D') toSend = '\x1bOD';
+                    }
+                    if (isApplicationKeypadMode()) {
+                        if (toSend === '\x1b[H') toSend = '\x1bOH';
+                        else if (toSend === '\x1b[F') toSend = '\x1bOF';
+                    }
+                    if (window.AndroidTerminal && typeof window.AndroidTerminal.onUserInput === 'function') {
+                        window.AndroidTerminal.onUserInput(toSend);
+                    }
+                });
+
+                term.attachCustomKeyEventHandler((e) => {
+                    if (e.type === 'keydown') {
+                        if (e.ctrlKey && !e.altKey && !e.metaKey) {
+                            if (e.key === 'c' || e.key === 'C') {
+                                if (!term.hasSelection() && window.AndroidTerminal) {
+                                    window.AndroidTerminal.onUserInput('\x03');
+                                    return false;
+                                }
+                            } else if (e.key === 'z' || e.key === 'Z') {
+                                if (window.AndroidTerminal) {
+                                    window.AndroidTerminal.onUserInput('\x1a');
+                                    return false;
+                                }
+                            } else if (e.key === 'd' || e.key === 'D') {
+                                if (window.AndroidTerminal) {
+                                    window.AndroidTerminal.onUserInput('\x04');
+                                    return false;
+                                }
+                            } else if (e.key === 'l' || e.key === 'L') {
+                                if (window.AndroidTerminal) {
+                                    window.AndroidTerminal.onUserInput('\x0c');
+                                    return false;
+                                }
+                            }
+                        }
+
+                        // Physical keyboard arrow keys handler for TUIs
+                        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'PageUp', 'PageDown', 'Insert', 'Delete'].includes(e.key)) {
+                            if (window.sendSpecialKey(e.key, e.shiftKey, e.altKey, e.ctrlKey)) {
+                                e.preventDefault();
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                });
+
+                window.addEventListener("resize", () => {
+                    clearTimeout(resizeDebounceTimer);
+                    resizeDebounceTimer = setTimeout(() => {
+                        fitTerminal();
+                    }, 100);
+                });
+
+                requestAnimationFrame(() => {
+                    fitTerminal();
+                    if (window.AndroidTerminal && typeof window.AndroidTerminal.onTerminalReady === 'function') {
+                        window.AndroidTerminal.onTerminalReady();
+                    }
+                });
+            } catch (err) {
+                console.error("Failed to initialize xterm:", err);
+            }
+        }
+
+        window.writeChunkBase64 = function(base64Data) {
+            try {
+                if (term) {
+                    const binary = atob(base64Data);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) {
+                        bytes[i] = binary.charCodeAt(i);
+                    }
+                    term.write(bytes, () => scheduleScrollbarCheck());
+                }
+            } catch (e) {
+                console.error("writeChunkBase64 failed", e);
+            }
+        };
+
+        window.setFontSize = function(size) {
+            if (term && size >= 6 && size <= 24) {
+                term.options.fontSize = size;
+                if (fitAddon) {
+                    fitAddon.fit();
+                }
+                const safeCols = Math.max(80, term.cols);
+                const safeRows = Math.max(24, term.rows);
+                if (term.cols !== safeCols || term.rows !== safeRows) {
+                    term.resize(safeCols, safeRows);
+                }
+            }
+        };
+
+        window.zoomIn = function() {
+            if (term) {
+                window.setFontSize(Math.min(20, Math.round(term.options.fontSize + 1)));
+            }
+        };
+
+        window.zoomOut = function() {
+            if (term) {
+                window.setFontSize(Math.max(6, Math.round(term.options.fontSize - 1)));
+            }
+        };
+
+        window.zoomReset = function() {
+            fitTerminal();
+        };
+
+        window.refit = function() {
+            fitTerminal();
+        };
+
+        window.resetTerminal = function() {
+            if (term) {
+                term.reset();
+            }
+            fitTerminal();
+            scheduleScrollbarCheck();
+        };
+
+        window.clearScreen = function() {
+            if (term) {
+                term.clear();
+            }
+            scheduleScrollbarCheck();
+        };
+
+        window.redrawTerminal = function() {
+            if (term) {
+                fitTerminal();
+                term.refresh(0, term.rows - 1);
+            }
+        };
+
+        window.scrollToTop = function() {
+            if (term) {
+                term.scrollToTop();
+            }
+        };
+
+        window.scrollToBottom = function() {
+            if (term) {
+                term.scrollToBottom();
+            }
+        };
+
+        window.sendSpecialKey = function(keyName, shiftKey, altKey, ctrlKey) {
+            if (!term) return false;
+            // Check terminal application cursor key mode (DECCKM - DEC Private Mode 1)
+            // When applicationCursorMode is true (e.g. in Midnight Commander 'mc', vi, htop, nano),
+            // cursor keys MUST emit SS3 sequences (ESC O A/B/C/D) instead of CSI (ESC [ A/B/C/D).
+            // In xterm.js 5.5.0, this is tracked in:
+            //   term.modes.applicationCursorKeysMode (public API with allowProposedApi)
+            //   term._core.coreService.decPrivateModes.applicationCursorKeys (internal core service)
+            //   term._core._modes.applicationCursorMode (legacy internal)
+            const decModes = term._core && term._core.coreService && term._core.coreService.decPrivateModes;
+            const appCursor = !!(
+                (term.modes && (term.modes.applicationCursorKeysMode || term.modes.applicationCursorMode)) ||
+                (decModes && (decModes.applicationCursorKeys || decModes.applicationCursorKeysMode || decModes.applicationCursorMode)) ||
+                (term._core && term._core._modes && term._core._modes.applicationCursorMode)
+            );
+            const appKeypad = !!(
+                (term.modes && term.modes.applicationKeypadMode) ||
+                (decModes && (decModes.applicationKeypad || decModes.applicationKeypadMode)) ||
+                (term._core && term._core._modes && term._core._modes.applicationKeypadMode)
+            );
+
+            let seq = null;
+            switch (keyName) {
+                case 'ArrowUp':
+                    seq = appCursor ? '\x1bOA' : '\x1b[A';
+                    break;
+                case 'ArrowDown':
+                    seq = appCursor ? '\x1bOB' : '\x1b[B';
+                    break;
+                case 'ArrowRight':
+                    seq = appCursor ? '\x1bOC' : '\x1b[C';
+                    break;
+                case 'ArrowLeft':
+                    seq = appCursor ? '\x1bOD' : '\x1b[D';
+                    break;
+                case 'Home':
+                    seq = appKeypad ? '\x1bOH' : '\x1b[H';
+                    break;
+                case 'End':
+                    seq = appKeypad ? '\x1bOF' : '\x1b[F';
+                    break;
+                case 'PageUp':
+                    seq = '\x1b[5~';
+                    break;
+                case 'PageDown':
+                    seq = '\x1b[6~';
+                    break;
+                case 'Delete':
+                    seq = '\x1b[3~';
+                    break;
+                case 'Insert':
+                    seq = '\x1b[2~';
+                    break;
+            }
+
+            if (seq) {
+                if (altKey) seq = '\x1b' + seq;
+                if (window.AndroidTerminal && typeof window.AndroidTerminal.onUserInput === 'function') {
+                    window.AndroidTerminal.onUserInput(seq);
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            initTerminal();
+        } else {
+            window.addEventListener('DOMContentLoaded', initTerminal);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Windows 4-square tilted / modern tile emblem -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M2,4.86L10.38,3.71V11.23H2V4.86ZM11.62,3.53L22,2V11.23H11.62V3.53ZM2,12.77H10.38V20.29L2,19.14V12.77ZM11.62,12.77H22V22L11.62,20.47V12.77Z"/>
+</vector>

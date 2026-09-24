@@ -1,0 +1,7 @@
+{
+  "name": "DietPi Dashboard",
+  "description": "Android frontend client for monitoring and managing DietPi systems with live telemetry, CPU/RAM stats, process management, services, and multi-node server control.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

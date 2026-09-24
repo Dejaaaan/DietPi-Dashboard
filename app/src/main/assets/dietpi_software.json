@@ -1,0 +1,2102 @@
+[
+  {
+    "id": 23,
+    "name": "LXDE",
+    "desc": "ultra lightweight desktop",
+    "category": "Desktops",
+    "homepage": "https://sourceforge.net/projects/lxde/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-LXDE_desktop.jpg",
+    "docs": "https://dietpi.com/docs/software/desktop/#lxde",
+    "deps": "5 6 browser"
+  },
+  {
+    "id": 24,
+    "name": "MATE",
+    "desc": "desktop enviroment",
+    "category": "Desktops",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-mate-desktop.jpg",
+    "docs": "https://dietpi.com/docs/software/desktop/#mate",
+    "deps": "5 6 browser"
+  },
+  {
+    "id": 25,
+    "name": "Xfce",
+    "desc": "lightweight desktop",
+    "category": "Desktops",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-xfce-desktop.jpg",
+    "docs": "https://dietpi.com/docs/software/desktop/#xfce",
+    "deps": "5 6 browser"
+  },
+  {
+    "id": 26,
+    "name": "GNUstep",
+    "desc": "lightweight desktop based on OpenStep",
+    "category": "Desktops",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-gnustep-desktop.jpg",
+    "docs": "https://dietpi.com/docs/software/desktop/#gnustep",
+    "deps": "5 6 browser"
+  },
+  {
+    "id": 173,
+    "name": "LXQt",
+    "desc": "lightweight desktop",
+    "category": "Desktops",
+    "homepage": "https://lxqt-project.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-LXQt_desktop.png",
+    "docs": "https://dietpi.com/docs/software/desktop/#lxqt",
+    "deps": "5 6 browser"
+  },
+  {
+    "id": 28,
+    "name": "TigerVNC Server",
+    "desc": "desktop for remote connection",
+    "category": "Remote Desktop & Access",
+    "homepage": "https://github.com/TigerVNC/tigervnc",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-remote-desktop-tigervnc.jpg",
+    "docs": "https://dietpi.com/docs/software/remote_desktop/#tigervnc-server",
+    "deps": "6"
+  },
+  {
+    "id": 29,
+    "name": "XRDP",
+    "desc": "remote desktop protocol (rdp) server",
+    "category": "Remote Desktop & Access",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-remotedesktop-xrdp.png",
+    "docs": "https://dietpi.com/docs/software/remote_desktop/#xrdp",
+    "deps": "6"
+  },
+  {
+    "id": 30,
+    "name": "NoMachine",
+    "desc": "multi-platform server and client access",
+    "category": "Remote Desktop & Access",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-remotedesktop-nomachine.png",
+    "docs": "https://dietpi.com/docs/software/remote_desktop/#nomachine",
+    "deps": ""
+  },
+  {
+    "id": 120,
+    "name": "RealVNC Server",
+    "desc": "desktop for remote connection",
+    "category": "Remote Desktop & Access",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-remotedesktop-realvnc.png",
+    "docs": "https://dietpi.com/docs/software/remote_desktop/#realvnc-server",
+    "deps": "6"
+  },
+  {
+    "id": 12,
+    "name": "RustDesk Server",
+    "desc": "open-source remote desktop server, written in Rust",
+    "category": "Remote Desktop & Access",
+    "homepage": "https://rustdesk.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-remotedesktop-rustdesk-logo.svg",
+    "docs": "https://dietpi.com/docs/software/remote_desktop/#rustdesk-server",
+    "deps": ""
+  },
+  {
+    "id": 13,
+    "name": "RustDesk Client",
+    "desc": "open-source remote desktop client, written in Rust",
+    "category": "Remote Desktop & Access",
+    "homepage": "https://rustdesk.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-remotedesktop-rustdesk-logo.svg",
+    "docs": "https://dietpi.com/docs/software/remote_desktop/#rustdesk-client",
+    "deps": "6"
+  },
+  {
+    "id": 31,
+    "name": "Kodi",
+    "desc": "The media centre for Linux",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/xbmc",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-kodi.jpg",
+    "docs": "https://dietpi.com/docs/software/media/#kodi",
+    "deps": "5 152"
+  },
+  {
+    "id": 32,
+    "name": "ympd",
+    "desc": "lightweight web interface music player for mpd",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-ympd.png",
+    "docs": "https://dietpi.com/docs/software/media/#ympd",
+    "deps": "128"
+  },
+  {
+    "id": 148,
+    "name": "myMPD",
+    "desc": "fork of ympd with improved features",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-ympd.png",
+    "docs": "https://dietpi.com/docs/software/media/#mympd",
+    "deps": "128"
+  },
+  {
+    "id": 119,
+    "name": "CAVA",
+    "desc": "Console audio visualisation for MPD",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-cava.gif",
+    "docs": "https://dietpi.com/docs/software/media/#cava",
+    "deps": "128"
+  },
+  {
+    "id": 33,
+    "name": "Airsonic-Advanced",
+    "desc": "Web interface media streaming server",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/airsonic-advanced/airsonic-advanced",
+    "imageUrl": "https://dietpi.com/docs/assets/images/airsonic-logo.svg",
+    "docs": "https://dietpi.com/docs/software/media/#airsonic",
+    "deps": "5 7 196"
+  },
+  {
+    "id": 35,
+    "name": "Lyrion Music Server",
+    "desc": "formerly Logitech Media Server and Squeezebox Server",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/LMS-Community/slimserver",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-squeezebox.png",
+    "docs": "https://dietpi.com/docs/software/media/#lyrion-music-server",
+    "deps": ""
+  },
+  {
+    "id": 36,
+    "name": "Squeezelite",
+    "desc": "audio player for LMS & Squeezebox",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/ralph-irving/squeezelite",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-squeezebox.png",
+    "docs": "https://dietpi.com/docs/software/media/#squeezelite",
+    "deps": "5"
+  },
+  {
+    "id": 37,
+    "name": "Shairport Sync",
+    "desc": "AirPlay audio player with multiroom sync",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-shairportsync.png",
+    "docs": "https://dietpi.com/docs/software/media/#shairport-sync",
+    "deps": "5 152"
+  },
+  {
+    "id": 39,
+    "name": "ReadyMedia",
+    "desc": "(MiniDLNA) media streaming server (DLNA, UPnP)",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-readymedia.jpg",
+    "docs": "https://dietpi.com/docs/software/media/#readymedia",
+    "deps": ""
+  },
+  {
+    "id": 40,
+    "name": "Ampache",
+    "desc": "web interface media streaming server",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://ampache.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-ampacheinterface.png",
+    "docs": "https://dietpi.com/docs/software/media/#ampache",
+    "deps": "5 7 88 89 webserver"
+  },
+  {
+    "id": 41,
+    "name": "Emby",
+    "desc": "web interface media streaming server",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-embyserver.png",
+    "docs": "https://dietpi.com/docs/software/media/#emby",
+    "deps": ""
+  },
+  {
+    "id": 42,
+    "name": "Plex Media Server",
+    "desc": "web interface media streaming server",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-plexmediaserver.png",
+    "docs": "https://dietpi.com/docs/software/media/#plex-media-server",
+    "deps": ""
+  },
+  {
+    "id": 43,
+    "name": "Mumble Server",
+    "desc": "(Murmur) Low latency encrypted VoIP server",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-murmur.png",
+    "docs": "https://dietpi.com/docs/software/media/#murmur",
+    "deps": ""
+  },
+  {
+    "id": 118,
+    "name": "Mopidy",
+    "desc": "Web interface music & radio player",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-mopidy.png",
+    "docs": "https://dietpi.com/docs/software/media/#mopidy",
+    "deps": "5 130"
+  },
+  {
+    "id": 121,
+    "name": "Roon Bridge",
+    "desc": "Turns device into Roon capable audio player",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://roon.app/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-roon.png",
+    "docs": "https://dietpi.com/docs/software/media/#roon-bridge",
+    "deps": "5"
+  },
+  {
+    "id": 124,
+    "name": "NAA Daemon",
+    "desc": "Signalyst Network Audio Adaptor (NAA)",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-naa.png",
+    "docs": "https://dietpi.com/docs/software/media/#naa-daemon",
+    "deps": "5"
+  },
+  {
+    "id": 128,
+    "name": "MPD",
+    "desc": "music player daemon",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-ympd.png",
+    "docs": "https://dietpi.com/docs/software/media/#ympd",
+    "deps": "5 152"
+  },
+  {
+    "id": 129,
+    "name": "O!MPD",
+    "desc": "Feature-rich, web interface audio player for MPD",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-ompd.png",
+    "docs": "https://dietpi.com/docs/software/media/#ompd",
+    "deps": "88 89 128 195 webserver"
+  },
+  {
+    "id": 135,
+    "name": "Icecast",
+    "desc": "Shoutcast streaming server (+DarkIce)",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-icecast.png",
+    "docs": "https://dietpi.com/docs/software/media/#icecast",
+    "deps": "5"
+  },
+  {
+    "id": 143,
+    "name": "Koel",
+    "desc": "web interface audio streamer",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://koel.dev/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-koel.png",
+    "docs": "https://dietpi.com/docs/software/media/#koel",
+    "deps": "7 88 89"
+  },
+  {
+    "id": 146,
+    "name": "Tautulli",
+    "desc": "monitoring and tracking tool for Plex",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://tautulli.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-tautulli.png",
+    "docs": "https://dietpi.com/docs/software/media/#tautulli",
+    "deps": "17"
+  },
+  {
+    "id": 154,
+    "name": "Roon Server",
+    "desc": "Roon capable audio player and core",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://roon.app/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-roon.png",
+    "docs": "https://dietpi.com/docs/software/media/#roon-server",
+    "deps": "1 5 7"
+  },
+  {
+    "id": 159,
+    "name": "Allo GUI full",
+    "desc": "Audiophile web interface with all dependencies",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/forum/t/dietpi-allo-com-web-gui-image/1523",
+    "deps": "36 37 88 89 96 128 129 152 160 163 webserver"
+  },
+  {
+    "id": 160,
+    "name": "Allo GUI",
+    "desc": "Audiophile web interface without dependencies",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/",
+    "deps": ""
+  },
+  {
+    "id": 163,
+    "name": "GMediaRender",
+    "desc": "Resource efficient UPnP/DLNA renderer",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-gmediarender.png",
+    "docs": "https://dietpi.com/docs/software/media/#gmediarender",
+    "deps": "5 152"
+  },
+  {
+    "id": 167,
+    "name": "Raspotify",
+    "desc": "A Spotify Connect client that mostly Just Works\u2122",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://dtcooper.github.io/raspotify/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-raspotify.png",
+    "docs": "https://dietpi.com/docs/software/media/#raspotify",
+    "deps": "5 152"
+  },
+  {
+    "id": 80,
+    "name": "Ubooquity",
+    "desc": "free home server for your comics and ebooks library",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-ubooquity.jpg",
+    "docs": "https://dietpi.com/docs/software/media/#ubooquity",
+    "deps": "196"
+  },
+  {
+    "id": 179,
+    "name": "Komga",
+    "desc": "free and open source comics/mangas media server with web UI",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://komga.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-komga.jpg",
+    "docs": "https://dietpi.com/docs/software/media/#komga",
+    "deps": "196"
+  },
+  {
+    "id": 86,
+    "name": "Roon Extension Manager",
+    "desc": "manage extensions from within Roon",
+    "category": "Media & Audio Streaming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-roon.png",
+    "docs": "https://dietpi.com/docs/software/media/#roon-extension-manager",
+    "deps": "162"
+  },
+  {
+    "id": 178,
+    "name": "Jellyfin",
+    "desc": "FOSS web interface media streaming server",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/jellyfin/jellyfin",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-jellyfin.jpg",
+    "docs": "https://dietpi.com/docs/software/media/#jellyfin",
+    "deps": ""
+  },
+  {
+    "id": 190,
+    "name": "Beets",
+    "desc": "music organizer and manager",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://beets.io/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-beets.png",
+    "docs": "https://dietpi.com/docs/software/media/#beets",
+    "deps": ""
+  },
+  {
+    "id": 191,
+    "name": "Snapcast Server",
+    "desc": "Multiroom audio server",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/badaix/snapcast",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-snapcast.png",
+    "docs": "https://dietpi.com/docs/software/media/#snapcast-server",
+    "deps": "5"
+  },
+  {
+    "id": 192,
+    "name": "Snapcast Client",
+    "desc": "Multiroom audio client",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/badaix/snapcast",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-snapcast.png",
+    "docs": "https://dietpi.com/docs/software/media/#snapcast-client",
+    "deps": "5"
+  },
+  {
+    "id": 199,
+    "name": "Spotifyd",
+    "desc": "Open source Spotify client running as UNIX daemon",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/Spotifyd/spotifyd",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-raspotify.png",
+    "docs": "https://dietpi.com/docs/software/media/#spotifyd",
+    "deps": "5"
+  },
+  {
+    "id": 204,
+    "name": "Navidrome",
+    "desc": "Web interface media streaming server",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/navidrome/navidrome",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-navidrome.png",
+    "docs": "https://dietpi.com/docs/software/media/#navidrome",
+    "deps": "5 7"
+  },
+  {
+    "id": 212,
+    "name": "Kavita",
+    "desc": "open source comics/mangas/ebooks media server with web reader",
+    "category": "Media & Audio Streaming",
+    "homepage": "https://github.com/Kareadita/Kavita",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-media-kavita.jpg",
+    "docs": "https://dietpi.com/docs/software/media/#kavita",
+    "deps": ""
+  },
+  {
+    "id": 44,
+    "name": "Transmission",
+    "desc": "BitTorrent server with web interface (C)",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://transmissionbt.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-transmission.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#transmission",
+    "deps": ""
+  },
+  {
+    "id": 45,
+    "name": "Deluge",
+    "desc": "BitTorrent server with web interface (Python)",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://deluge-torrent.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-deluge.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#deluge",
+    "deps": ""
+  },
+  {
+    "id": 46,
+    "name": "qBittorrent",
+    "desc": "BitTorrent server with web interface (C++)",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://www.qbittorrent.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-qbittorrent.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#qbittorrent",
+    "deps": ""
+  },
+  {
+    "id": 107,
+    "name": "rTorrent",
+    "desc": "BitTorrent server (C++) with rutorrent web interface (PHP)",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://rakshasa.github.io/rtorrent/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-rtorrent.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#rtorrent",
+    "deps": "89 170 webserver"
+  },
+  {
+    "id": 116,
+    "name": "Medusa",
+    "desc": "Automatic video library manager for TV shows",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://github.com/pymedusa/Medusa",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-medusa.jpg",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#medusa",
+    "deps": "170"
+  },
+  {
+    "id": 132,
+    "name": "Aria2",
+    "desc": "Download manager with web interface",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://aria2.github.io/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-aria2.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#arias",
+    "deps": "87 89 webserver"
+  },
+  {
+    "id": 139,
+    "name": "SABnzbd",
+    "desc": "NZB download manager",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://sabnzbd.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-sabnzbd.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#sabnzbd",
+    "deps": "130 170"
+  },
+  {
+    "id": 144,
+    "name": "Sonarr",
+    "desc": "Automatically download TV shows",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://sonarr.tv/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-sonarr.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#sonarr",
+    "deps": ""
+  },
+  {
+    "id": 145,
+    "name": "Radarr",
+    "desc": "Automatically download movies",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://radarr.video/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-radarr.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#radarr",
+    "deps": ""
+  },
+  {
+    "id": 106,
+    "name": "Lidarr",
+    "desc": "Automatically download music",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://lidarr.audio/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-lidarr.jpg",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#lidarr",
+    "deps": ""
+  },
+  {
+    "id": 180,
+    "name": "Bazarr",
+    "desc": "Automatically download subtitles",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://www.bazarr.media/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-bazarr1.jpg",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#bazarr",
+    "deps": "130"
+  },
+  {
+    "id": 147,
+    "name": "Jackett",
+    "desc": "API support for your torrent trackers",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://github.com/Jackett/Jackett/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-jackett.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#jackett",
+    "deps": ""
+  },
+  {
+    "id": 149,
+    "name": "NZBGet",
+    "desc": "NZB download manager",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://nzbget.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-nzbget.jpg",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#nzbget",
+    "deps": ""
+  },
+  {
+    "id": 151,
+    "name": "Prowlarr",
+    "desc": "Indexer manager & proxy for PVR",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://prowlarr.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-prowlarr.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#prowlarr",
+    "deps": ""
+  },
+  {
+    "id": 203,
+    "name": "Readarr",
+    "desc": "Ebook and audiobook collection manager",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://readarr.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-readarr.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#readarr",
+    "deps": ""
+  },
+  {
+    "id": 155,
+    "name": "HTPC Manager",
+    "desc": "Manage your HTPC from anywhere",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://htpc.io/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-download-htpc-manager.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#htpc-manager",
+    "deps": "17 130"
+  },
+  {
+    "id": 195,
+    "name": "yt-dlp",
+    "desc": "Download videos from YouTube and other sites (youtube-dl successor)",
+    "category": "BitTorrent & Downloads",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#yt-dlp",
+    "deps": "7"
+  },
+  {
+    "id": 169,
+    "name": "LazyLibrarian",
+    "desc": "Ebook and audiobook collection manager",
+    "category": "BitTorrent & Downloads",
+    "homepage": "https://lazylibrarian.gitlab.io/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/lazylibrarian.png",
+    "docs": "https://dietpi.com/docs/software/bittorrent/#lazylibrarian",
+    "deps": "130"
+  },
+  {
+    "id": 47,
+    "name": "ownCloud Infinite Scale",
+    "desc": "File sync & share platform (Go)",
+    "category": "Cloud & Backup",
+    "homepage": "https://owncloud.com/infinite-scale/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/ocis.webp",
+    "docs": "https://dietpi.com/docs/software/cloud/#owncloud",
+    "deps": ""
+  },
+  {
+    "id": 114,
+    "name": "Nextcloud",
+    "desc": "File sync, sharing and collaboration platform (PHP)",
+    "category": "Cloud & Backup",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-nextcloud.jpg",
+    "docs": "https://dietpi.com/docs/software/cloud/#nextcloud",
+    "deps": "88 89 91 webserver"
+  },
+  {
+    "id": 168,
+    "name": "Nextcloud Talk",
+    "desc": "Video calls with configured Coturn server (PHP)",
+    "category": "Cloud & Backup",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-nextcloud.jpg",
+    "docs": "https://dietpi.com/docs/software/cloud/#nextcloud-talk",
+    "deps": "114"
+  },
+  {
+    "id": 111,
+    "name": "UrBackup Server",
+    "desc": "Full system backup server",
+    "category": "Cloud & Backup",
+    "homepage": "https://www.urbackup.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-urbackup.png",
+    "docs": "https://dietpi.com/docs/software/cloud/#urbackup",
+    "deps": ""
+  },
+  {
+    "id": 49,
+    "name": "Gogs",
+    "desc": "Personal Git server with web interface",
+    "category": "Cloud & Backup",
+    "homepage": "https://github.com/gogs/gogs",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-gogs.png",
+    "docs": "https://dietpi.com/docs/software/cloud/#gogs",
+    "deps": "17 88 0"
+  },
+  {
+    "id": 50,
+    "name": "Syncthing",
+    "desc": "Backup and sync server with web interface",
+    "category": "Cloud & Backup",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-syncthing.png",
+    "docs": "https://dietpi.com/docs/software/cloud/#syncthing",
+    "deps": ""
+  },
+  {
+    "id": 158,
+    "name": "MinIO",
+    "desc": "S3 compatible distributed object server",
+    "category": "Cloud & Backup",
+    "homepage": "https://min.io/product/overview",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-minio.jpg",
+    "docs": "https://dietpi.com/docs/software/cloud/#minio",
+    "deps": ""
+  },
+  {
+    "id": 161,
+    "name": "FuguHub",
+    "desc": "Lightweight WebDAV cloud with a CMS, album and blog integration",
+    "category": "Cloud & Backup",
+    "homepage": "https://fuguhub.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-fuguhub.png",
+    "docs": "https://dietpi.com/docs/software/cloud/#fuguhub",
+    "deps": ""
+  },
+  {
+    "id": 165,
+    "name": "Gitea",
+    "desc": "Git with a cup of tea",
+    "category": "Cloud & Backup",
+    "homepage": "https://about.gitea.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-gitea.jpg",
+    "docs": "https://dietpi.com/docs/software/cloud/#gitea",
+    "deps": "17 88 0"
+  },
+  {
+    "id": 177,
+    "name": "Forgejo",
+    "desc": "Self-hosted lightweight software forge. Fork of Gitea.",
+    "category": "Cloud & Backup",
+    "homepage": "https://forgejo.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-forgejo.svg",
+    "docs": "https://dietpi.com/docs/software/cloud/#forgejo",
+    "deps": "17 88 0"
+  },
+  {
+    "id": 183,
+    "name": "vaultwarden",
+    "desc": "Unofficial Bitwarden password manager server written in Rust",
+    "category": "Cloud & Backup",
+    "homepage": "https://github.com/dani-garcia/vaultwarden",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-vaultwarden.jpg",
+    "docs": "https://dietpi.com/docs/software/cloud/#vaultwarden",
+    "deps": "87"
+  },
+  {
+    "id": 198,
+    "name": "File Browser",
+    "desc": "web based file manager",
+    "category": "Cloud & Backup",
+    "homepage": "https://github.com/filebrowser/filebrowser",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-filebrowser.svg",
+    "docs": "https://dietpi.com/docs/software/cloud/#filebrowser",
+    "deps": ""
+  },
+  {
+    "id": 202,
+    "name": "Rclone",
+    "desc": "Utility to sync your files to cloud storages",
+    "category": "Cloud & Backup",
+    "homepage": "https://github.com/rclone/rclone",
+    "imageUrl": "https://dietpi.com/docs/assets/images/rclone-logo.svg",
+    "docs": "https://dietpi.com/docs/software/cloud/#rclone",
+    "deps": ""
+  },
+  {
+    "id": 209,
+    "name": "Restic",
+    "desc": "Fast, efficient and secure command-line backup program",
+    "category": "Cloud & Backup",
+    "homepage": "https://restic.net/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/restic-logo.png",
+    "docs": "https://dietpi.com/docs/software/cloud/#restic",
+    "deps": ""
+  },
+  {
+    "id": 215,
+    "name": "Immich",
+    "desc": "High performance self-hosted photo and video management solution",
+    "category": "Cloud & Backup",
+    "homepage": "https://immich.app/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-immich.svg",
+    "docs": "https://dietpi.com/docs/software/cloud/#immich",
+    "deps": "7 9 91 194"
+  },
+  {
+    "id": 216,
+    "name": "Immich Machine Learning",
+    "desc": "Machine learning server for Immich facial recognition and smart search",
+    "category": "Cloud & Backup",
+    "homepage": "https://immich.app/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-immich.svg",
+    "docs": "https://dietpi.com/docs/software/cloud/#immich-machine-learning",
+    "deps": "130"
+  },
+  {
+    "id": 108,
+    "name": "Amiberry",
+    "desc": "Optimised Amiga emulator for multiple platforms",
+    "category": "Gaming & Emulation",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-amiberry.jpg",
+    "docs": "https://dietpi.com/docs/software/gaming/#amiberry",
+    "deps": "5"
+  },
+  {
+    "id": 10,
+    "name": "Amiberry-Lite",
+    "desc": "Optimised Amiga emulator recommended for smaller ARM/RISC-V SBCs",
+    "category": "Gaming & Emulation",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-amiberry.jpg",
+    "docs": "https://dietpi.com/docs/software/gaming/#amiberry-lite",
+    "deps": "5"
+  },
+  {
+    "id": 51,
+    "name": "OpenTyrian",
+    "desc": "a classic retro game, addictive",
+    "category": "Gaming & Emulation",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-opentyrian.jpg",
+    "docs": "https://dietpi.com/docs/software/gaming/#opentyrian",
+    "deps": "5 6"
+  },
+  {
+    "id": 112,
+    "name": "DXX-Rebirth",
+    "desc": "Descent 1/2",
+    "category": "Gaming & Emulation",
+    "homepage": "https://www.dxx-rebirth.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-dxxrebirth.png",
+    "docs": "https://dietpi.com/docs/software/gaming/#dxx-rebirth",
+    "deps": "5"
+  },
+  {
+    "id": 52,
+    "name": "Cuberite",
+    "desc": "Minecraft server with web interface (C++)",
+    "category": "Gaming & Emulation",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-cuberite.png",
+    "docs": "https://dietpi.com/docs/software/gaming/#cuberite",
+    "deps": ""
+  },
+  {
+    "id": 53,
+    "name": "MineOS",
+    "desc": "Minecraft servers with web interface (Java/Node.js)",
+    "category": "Gaming & Emulation",
+    "homepage": "https://github.com/hexparrot/mineos-node",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-mineos.png",
+    "docs": "https://dietpi.com/docs/software/gaming/#mineos",
+    "deps": "9 17 196"
+  },
+  {
+    "id": 156,
+    "name": "Steam",
+    "desc": "Valve gaming platform client",
+    "category": "Gaming & Emulation",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-steam.jpg",
+    "docs": "https://dietpi.com/docs/software/gaming/#steam",
+    "deps": "5 6"
+  },
+  {
+    "id": 164,
+    "name": "Nukkit",
+    "desc": "A nuclear-powered server for Minecraft Pocket Edition",
+    "category": "Gaming & Emulation",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-nukkit.png",
+    "docs": "https://dietpi.com/docs/software/gaming/#nukkit",
+    "deps": "196"
+  },
+  {
+    "id": 181,
+    "name": "PaperMC",
+    "desc": "Highly optimised Minecraft server with plugins, written in Java",
+    "category": "Gaming & Emulation",
+    "homepage": "https://docs.papermc.io/paper/admin",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-papermc.jpg",
+    "docs": "https://dietpi.com/docs/software/gaming/#papermc",
+    "deps": "196"
+  },
+  {
+    "id": 62,
+    "name": "Box86",
+    "desc": "x86 userspace emulation",
+    "category": "Gaming & Emulation",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/gaming/#box86",
+    "deps": ""
+  },
+  {
+    "id": 197,
+    "name": "Box64",
+    "desc": "x86_64 userspace emulation",
+    "category": "Gaming & Emulation",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/gaming/#box64",
+    "deps": ""
+  },
+  {
+    "id": 207,
+    "name": "Moonlight (CLI)",
+    "desc": "CLI game streaming client for Sunshine and NVIDIA GameStream",
+    "category": "Gaming & Emulation",
+    "homepage": "https://moonlight-stream.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-moonlight.webp",
+    "docs": "https://dietpi.com/docs/software/gaming/#moonlight-cli",
+    "deps": ""
+  },
+  {
+    "id": 208,
+    "name": "Moonlight (GUI)",
+    "desc": "GUI game streaming client for Sunshine and NVIDIA GameStream",
+    "category": "Gaming & Emulation",
+    "homepage": "https://moonlight-stream.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-moonlight.webp",
+    "docs": "https://dietpi.com/docs/software/gaming/#moonlight-gui",
+    "deps": ""
+  },
+  {
+    "id": 11,
+    "name": "GZDoom",
+    "desc": "Modder-friendly OpenGL and Vulkan source port based on the DOOM engine",
+    "category": "Gaming & Emulation",
+    "homepage": "https://zdoom.org/index",
+    "imageUrl": "https://dietpi.com/docs/assets/images/gzdoom-logo.png",
+    "docs": "https://dietpi.com/docs/software/gaming/#gzdoom",
+    "deps": "5"
+  },
+  {
+    "id": 54,
+    "name": "phpBB",
+    "desc": "bulletin board forum software",
+    "category": "Social & Search",
+    "homepage": "https://www.phpbb.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-social-phpbb.png",
+    "docs": "https://dietpi.com/docs/software/social/#phpbb",
+    "deps": "88 89 webserver"
+  },
+  {
+    "id": 55,
+    "name": "WordPress",
+    "desc": "website blog and publishing platform",
+    "category": "Social & Search",
+    "homepage": "https://wordpress.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-social-wordpress.jpg",
+    "docs": "https://dietpi.com/docs/software/social/#wordpress",
+    "deps": "88 89 webserver"
+  },
+  {
+    "id": 38,
+    "name": "FreshRSS",
+    "desc": "self-hosted RSS feed aggregator",
+    "category": "Social & Search",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-social-freshrss.jpg",
+    "docs": "https://dietpi.com/docs/software/social/#freshrss",
+    "deps": "88 89 webserver"
+  },
+  {
+    "id": 56,
+    "name": "Single File PHP Gallery",
+    "desc": "Website to host and browse your images",
+    "category": "Social & Search",
+    "homepage": "https://sye.dk/sfpg/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-social-imagegallery.png",
+    "docs": "https://dietpi.com/docs/software/social/#single-file-php-gallery",
+    "deps": "89 webserver"
+  },
+  {
+    "id": 57,
+    "name": "Ba\u00efkal",
+    "desc": "lightweight caldav + carddav server",
+    "category": "Social & Search",
+    "homepage": "https://sabre.io/baikal/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-social-baikal.png",
+    "docs": "https://dietpi.com/docs/software/social/#baikal",
+    "deps": "88 89 webserver"
+  },
+  {
+    "id": 125,
+    "name": "Synapse",
+    "desc": "Matrix homeserver implementation",
+    "category": "Social & Search",
+    "homepage": "https://matrix.org/",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/social/#synapse",
+    "deps": "130 194"
+  },
+  {
+    "id": 16,
+    "name": "microblog.pub",
+    "desc": "A self-hosted, single-user, ActivityPub powered microblog.",
+    "category": "Social & Search",
+    "homepage": "https://sr.ht/~tsileo/microblog.pub/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-social-microblogpub1.jpg",
+    "docs": "https://dietpi.com/docs/software/social/#microblogpub",
+    "deps": "17"
+  },
+  {
+    "id": 210,
+    "name": "MediaWiki",
+    "desc": "A collaboration and documentation platform",
+    "category": "Social & Search",
+    "homepage": "https://www.mediawiki.org/wiki/MediaWiki",
+    "imageUrl": "https://dietpi.com/docs/assets/images/mediawiki-logo.svg",
+    "docs": "https://dietpi.com/docs/software/social/#mediawiki",
+    "deps": "88 89 webserver"
+  },
+  {
+    "id": 213,
+    "name": "soju",
+    "desc": "A user-friendly IRC bouncer",
+    "category": "Social & Search",
+    "homepage": "https://soju.im",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-social-soju.webp",
+    "docs": "https://dietpi.com/docs/software/social/#soju",
+    "deps": "188"
+  },
+  {
+    "id": 136,
+    "name": "motionEye",
+    "desc": "Web interface & surveillance for your camera",
+    "category": "Camera & Surveillance",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-camera-motioneye.png",
+    "docs": "https://dietpi.com/docs/software/camera/#motioneye",
+    "deps": "7 130"
+  },
+  {
+    "id": 137,
+    "name": "mjpg-streamer",
+    "desc": "Simple camera streaming tool with HTML plugin",
+    "category": "Camera & Surveillance",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/mjpg-streamer.gif",
+    "docs": "https://dietpi.com/docs/software/camera/#mjpg-streamer",
+    "deps": ""
+  },
+  {
+    "id": 127,
+    "name": "BirdNET-Go",
+    "desc": "Continuous avian monitoring and identification",
+    "category": "Camera & Surveillance",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-camera-birdnet-go-logo.webp",
+    "docs": "https://dietpi.com/docs/software/camera/#birdnet-go",
+    "deps": "7 87"
+  },
+  {
+    "id": 3,
+    "name": "MC",
+    "desc": "Midnight Commander - a powerful file manager",
+    "category": "Gaming & Emulation",
+    "homepage": "https://docs.papermc.io/paper/admin",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-games-papermc.jpg",
+    "docs": "https://dietpi.com/docs/software/system_stats/#gnu-midnight-commander",
+    "deps": ""
+  },
+  {
+    "id": 63,
+    "name": "LinuxDash",
+    "desc": "web interface system stats",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-systemstat-linuxdash.png",
+    "docs": "https://dietpi.com/docs/software/system_stats/#linuxdash",
+    "deps": "89 webserver"
+  },
+  {
+    "id": 64,
+    "name": "phpSysInfo",
+    "desc": "web interface system stats",
+    "category": "System Stats & Management",
+    "homepage": "https://phpsysinfo.github.io/phpsysinfo",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-systemstat-phpsysinfo.png",
+    "docs": "https://dietpi.com/docs/software/system_stats/#phpsysinfo",
+    "deps": "89 webserver"
+  },
+  {
+    "id": 65,
+    "name": "Netdata",
+    "desc": "real-time performance monitoring",
+    "category": "System Stats & Management",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-systemstat-netdata.png",
+    "docs": "https://dietpi.com/docs/software/system_stats/#netdata",
+    "deps": ""
+  },
+  {
+    "id": 66,
+    "name": "RPi-Monitor",
+    "desc": "Web interface for Raspberry Pi real-time monitoring",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/XavierBerger/RPi-Monitor",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-systemstat-rpimonitor.png",
+    "docs": "https://dietpi.com/docs/software/system_stats/#rpi-monitor",
+    "deps": ""
+  },
+  {
+    "id": 115,
+    "name": "Webmin",
+    "desc": "web interface system management",
+    "category": "System Stats & Management",
+    "homepage": "https://webmin.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-systemstat-webmin.png",
+    "docs": "https://dietpi.com/docs/software/system_stats/#webmin",
+    "deps": ""
+  },
+  {
+    "id": 162,
+    "name": "Docker",
+    "desc": "Build, ship, and run distributed applications",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/moby/moby",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-programming-docker1.svg",
+    "docs": "https://dietpi.com/docs/software/system_stats/#docker",
+    "deps": ""
+  },
+  {
+    "id": 185,
+    "name": "Portainer",
+    "desc": "Simplifies container management in Docker (standalone host)",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/portainer/portainer",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-portainer.jpg",
+    "docs": "https://dietpi.com/docs/software/system_stats/#portainer",
+    "deps": "162"
+  },
+  {
+    "id": 134,
+    "name": "Docker Compose",
+    "desc": "Manage multi-container Docker applications",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/moby/moby",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-programming-docker1.svg",
+    "docs": "https://dietpi.com/docs/software/system_stats/#docker-compose",
+    "deps": "162"
+  },
+  {
+    "id": 193,
+    "name": "K3s",
+    "desc": "The certified Kubernetes distribution built for IoT & Edge computing",
+    "category": "System Stats & Management",
+    "homepage": "https://k3s.io",
+    "imageUrl": "https://dietpi.com/docs/assets/images/logo-k3s.svg",
+    "docs": "https://dietpi.com/docs/software/cloud/#k3s",
+    "deps": ""
+  },
+  {
+    "id": 142,
+    "name": "MicroK8s",
+    "desc": "The simplest production-grade upstream K8s, light and focused",
+    "category": "System Stats & Management",
+    "homepage": "https://canonical.com/microk8s",
+    "imageUrl": "https://dietpi.com/docs/assets/images/microk8s.png",
+    "docs": "https://dietpi.com/docs/software/cloud/#microk8s",
+    "deps": ""
+  },
+  {
+    "id": 200,
+    "name": "DietPi-Dashboard",
+    "desc": "(rework beta!) Official lightweight DietPi web interface (Rust)",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/nonnorm/DietPi-Dashboard",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-dashboard.jpg",
+    "docs": "https://dietpi.com/docs/software/system_stats/#dietpi-dashboard",
+    "deps": ""
+  },
+  {
+    "id": 99,
+    "name": "Prometheus Node Exporter",
+    "desc": "Prometheus exporter for hardware and OS metrics",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/prometheus/node_exporter",
+    "imageUrl": "https://dietpi.com/docs/assets/images/grafana_node_exporter_full.png",
+    "docs": "https://dietpi.com/docs/software/system_stats/#prometheus_node_exporter",
+    "deps": ""
+  },
+  {
+    "id": 218,
+    "name": "Prometheus",
+    "desc": "Prometheus monitoring system and time series database",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/prometheus/node_exporter",
+    "imageUrl": "https://dietpi.com/docs/assets/images/grafana_node_exporter_full.png",
+    "docs": "https://dietpi.com/docs/software/system_stats/#prometheus",
+    "deps": ""
+  },
+  {
+    "id": 205,
+    "name": "Homer",
+    "desc": "Simple HOMepage for your servER to keep your services on hand",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/bastienwirtz/homer",
+    "imageUrl": "https://dietpi.com/docs/assets/images/homer-preview.png",
+    "docs": "https://dietpi.com/docs/software/system_stats/#homer",
+    "deps": "webserver"
+  },
+  {
+    "id": 176,
+    "name": "Uptime Kuma",
+    "desc": "A fancy self-hosted monitoring tool",
+    "category": "System Stats & Management",
+    "homepage": "https://github.com/louislam/uptime-kuma",
+    "imageUrl": "https://dietpi.com/docs/assets/images/uptime-kuma.webp",
+    "docs": "https://dietpi.com/docs/software/system_stats/#uptime-kuma",
+    "deps": "9' # Node.js"
+  },
+  {
+    "id": 68,
+    "name": "Remote.It",
+    "desc": "Provides secure connections to your networked devices",
+    "category": "Remote Desktop & Access",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-remotedesktop-remoteit.png",
+    "docs": "https://dietpi.com/docs/software/remote_desktop/#remot3it",
+    "deps": ""
+  },
+  {
+    "id": 138,
+    "name": "VirtualHere",
+    "desc": "server: share USB devices over the network",
+    "category": "Remote Desktop & Access",
+    "homepage": "https://virtualhere.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-remotedesktop-virtualhere.png",
+    "docs": "https://dietpi.com/docs/software/remote_desktop/#virtualhere",
+    "deps": "152"
+  },
+  {
+    "id": 69,
+    "name": "Python 3 RPi.GPIO",
+    "desc": "Control Raspberry Pi GPIO channels in Python 3",
+    "category": "Hardware Projects & IoT",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-gpio.png",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#rpigpio",
+    "deps": ""
+  },
+  {
+    "id": 70,
+    "name": "WiringPi",
+    "desc": "GPIO interface library (C)",
+    "category": "Hardware Projects & IoT",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-wiringpi.png",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#wiringpi",
+    "deps": ""
+  },
+  {
+    "id": 71,
+    "name": "WebIOPi",
+    "desc": "Web interface to control RPi GPIO channels",
+    "category": "Hardware Projects & IoT",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-webiopi.png",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#webiopi",
+    "deps": "69"
+  },
+  {
+    "id": 72,
+    "name": "I2C",
+    "desc": "enables support for I2C based hardware",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/",
+    "deps": ""
+  },
+  {
+    "id": 100,
+    "name": "PiJuice",
+    "desc": "pisupply ups",
+    "category": "Hardware Projects & IoT",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-pijuice.jpg",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#pijuice",
+    "deps": "72"
+  },
+  {
+    "id": 122,
+    "name": "Node-RED",
+    "desc": "tool for wiring devices, APIs and online services",
+    "category": "Hardware Projects & IoT",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-nodered.png",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#node-red",
+    "deps": "9"
+  },
+  {
+    "id": 123,
+    "name": "Mosquitto",
+    "desc": "MQTT messaging broker",
+    "category": "Hardware Projects & IoT",
+    "homepage": "https://mosquitto.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-mosquitto.png",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#mosquitto",
+    "deps": ""
+  },
+  {
+    "id": 131,
+    "name": "Blynk Server",
+    "desc": "msg controller for blynk mobile app and sbcs",
+    "category": "Hardware Projects & IoT",
+    "homepage": "https://blynk.io/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-blynk.jpg",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#blynk-server",
+    "deps": "196 9"
+  },
+  {
+    "id": 166,
+    "name": "Audiophonics PI-SPC",
+    "desc": "Raspberry Pi power management module",
+    "category": "Hardware Projects & IoT",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-audiophonis-pcb.jpg",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#audiophonics-pi-spc",
+    "deps": "70"
+  },
+  {
+    "id": 77,
+    "name": "Grafana",
+    "desc": "platform for analytics and monitoring",
+    "category": "Hardware Projects & IoT",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-hardwareprojects-grafana.png",
+    "docs": "https://dietpi.com/docs/software/hardware_projects/#grafana",
+    "deps": ""
+  },
+  {
+    "id": 73,
+    "name": "Fail2Ban",
+    "desc": "prevents brute-force attacks with ip ban",
+    "category": "System Security",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-security-fail2ban1.jpg",
+    "docs": "https://dietpi.com/docs/software/system_security/#fail2ban",
+    "deps": ""
+  },
+  {
+    "id": 92,
+    "name": "Certbot",
+    "desc": "Obtain and renew Let's Encrypt SSL certs for HTTPS",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-security-certbot.png",
+    "docs": "https://dietpi.com/docs/software/system_security/#lets-encrypt",
+    "deps": ""
+  },
+  {
+    "id": 75,
+    "name": "LASP",
+    "desc": "Apache   + SQLite  + PHP",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#lasp-web-stack",
+    "deps": "83 87 89"
+  },
+  {
+    "id": 76,
+    "name": "LAMP",
+    "desc": "Apache   + MariaDB + PHP",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-lamp.jpg",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#lamp-web-stack",
+    "deps": "83 88 89"
+  },
+  {
+    "id": 78,
+    "name": "LESP",
+    "desc": "Nginx    + SQLite  + PHP",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#lesp-web-stack",
+    "deps": "85 87 89"
+  },
+  {
+    "id": 79,
+    "name": "LEMP",
+    "desc": "Nginx    + MariaDB + PHP",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#lemp-web-stack",
+    "deps": "85 88 89"
+  },
+  {
+    "id": 81,
+    "name": "LLSP",
+    "desc": "Lighttpd + SQLite  + PHP",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#llsp-web-stack",
+    "deps": "84 87 89"
+  },
+  {
+    "id": 82,
+    "name": "LLMP",
+    "desc": "Lighttpd + MariaDB + PHP",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#llmp-web-stack",
+    "deps": "84 88 89"
+  },
+  {
+    "id": 83,
+    "name": "Apache",
+    "desc": "Popular webserver",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-apache2.jpg",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#apache2",
+    "deps": ""
+  },
+  {
+    "id": 84,
+    "name": "Lighttpd",
+    "desc": "Extremely lightweight webserver",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-lighttpd.svg",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#lighttpd",
+    "deps": ""
+  },
+  {
+    "id": 85,
+    "name": "Nginx",
+    "desc": "Lightweight webserver",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-nginx.gif",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#nginx",
+    "deps": ""
+  },
+  {
+    "id": 89,
+    "name": "PHP",
+    "desc": "Hypertext Preprocessor for dynamic web content",
+    "category": "Databases & Data Stores",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-phpmyadmin.png",
+    "docs": "https://dietpi.com/docs/software/webserver_stack/#php",
+    "deps": ""
+  },
+  {
+    "id": 93,
+    "name": "Pi-hole",
+    "desc": "block adverts for any device on your network",
+    "category": "DNS Servers & Ad Blocking",
+    "homepage": "https://pi-hole.net/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-dnsserver-pihole.png",
+    "docs": "https://dietpi.com/docs/software/dns_servers/#pi-hole",
+    "deps": "17"
+  },
+  {
+    "id": 126,
+    "name": "AdGuard Home",
+    "desc": "powerful network-wide ads & trackers blocking DNS server",
+    "category": "DNS Servers & Ad Blocking",
+    "homepage": "https://adguard.com/en/adguard-home/overview.html",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-dnsserver-adguardhome.png",
+    "docs": "https://dietpi.com/docs/software/dns_servers/#adguard-home",
+    "deps": ""
+  },
+  {
+    "id": 182,
+    "name": "Unbound",
+    "desc": "validating, recursive, caching DNS resolver",
+    "category": "DNS Servers & Ad Blocking",
+    "homepage": "https://nlnetlabs.nl/projects/unbound/about/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-dnsserver-unbound.svg",
+    "docs": "https://dietpi.com/docs/software/dns_servers/#unbound",
+    "deps": ""
+  },
+  {
+    "id": 94,
+    "name": "ProFTPD",
+    "desc": "Feature-rich FTP server with Apache-like config and FTPS+SFTP modules",
+    "category": "File Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-fileservers-proftpd.png",
+    "docs": "https://dietpi.com/docs/software/file_servers/#proftpd",
+    "deps": ""
+  },
+  {
+    "id": 95,
+    "name": "vsftpd",
+    "desc": "Lightweight FTP/FTPS server",
+    "category": "File Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-fileservers-vsftpd.png",
+    "docs": "https://dietpi.com/docs/software/file_servers/#vsftpd",
+    "deps": ""
+  },
+  {
+    "id": 96,
+    "name": "Samba Server",
+    "desc": "Feature-rich SMB/CIFS server",
+    "category": "File Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-fileservers-samba.png",
+    "docs": "https://dietpi.com/docs/software/file_servers/#samba",
+    "deps": ""
+  },
+  {
+    "id": 109,
+    "name": "NFS Server",
+    "desc": "Network File System server",
+    "category": "File Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-fileservers-nfs.png",
+    "docs": "https://dietpi.com/docs/software/file_servers/#nfs",
+    "deps": ""
+  },
+  {
+    "id": 97,
+    "name": "OpenVPN",
+    "desc": "vpn server",
+    "category": "VPN",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-vpn-openvpn-logo.png",
+    "docs": "https://dietpi.com/docs/software/vpn/#openvpn",
+    "deps": ""
+  },
+  {
+    "id": 172,
+    "name": "WireGuard",
+    "desc": "an extremely simple yet fast and modern VPN",
+    "category": "VPN",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-vpn-wireguard.svg",
+    "docs": "https://dietpi.com/docs/software/vpn/#wireguard",
+    "deps": ""
+  },
+  {
+    "id": 117,
+    "name": "PiVPN",
+    "desc": "openvpn/wireguard server install & management tool",
+    "category": "VPN",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-vpn-pivpn-logo.png",
+    "docs": "https://dietpi.com/docs/software/vpn/#pivpn",
+    "deps": "17"
+  },
+  {
+    "id": 58,
+    "name": "Tailscale",
+    "desc": "Zero config VPN",
+    "category": "VPN",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/tailscale-logo.svg",
+    "docs": "https://dietpi.com/docs/software/vpn/#tailscale",
+    "deps": ""
+  },
+  {
+    "id": 201,
+    "name": "ZeroTier",
+    "desc": "Free easy to deploy cloud-hosted VPN service",
+    "category": "VPN",
+    "homepage": "https://github.com/zerotier/ZeroTierOne",
+    "imageUrl": "https://dietpi.com/docs/assets/images/zerotier-logo.png",
+    "docs": "https://dietpi.com/docs/software/vpn/#zerotier",
+    "deps": ""
+  },
+  {
+    "id": 60,
+    "name": "WiFi Hotspot",
+    "desc": "turn your device into a WiFi hotspot",
+    "category": "Advanced Networking",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-advanced-networking-wifihotspot.png",
+    "docs": "https://dietpi.com/docs/software/advanced_networking/#wifi-hotspot",
+    "deps": ""
+  },
+  {
+    "id": 61,
+    "name": "Tor Hotspot",
+    "desc": "optional: route hotspot traffic through tor",
+    "category": "Advanced Networking",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-advanced-networking-torhotspot.png",
+    "docs": "https://dietpi.com/docs/software/advanced_networking/#tor-hotspot",
+    "deps": "60"
+  },
+  {
+    "id": 98,
+    "name": "HAProxy",
+    "desc": "high performance TCP/HTTP load balancer",
+    "category": "Advanced Networking",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-advanced-networking-haproxy2.jpg",
+    "docs": "https://dietpi.com/docs/software/advanced_networking/#haproxy",
+    "deps": ""
+  },
+  {
+    "id": 152,
+    "name": "Avahi-Daemon",
+    "desc": "Hostname broadcast via mDNS (Zeroconf, Bonjour)",
+    "category": "Advanced Networking",
+    "homepage": "https://avahi.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-advanced-networking-avahi-logo.png",
+    "docs": "https://dietpi.com/docs/software/advanced_networking/#avahi-daemon",
+    "deps": ""
+  },
+  {
+    "id": 171,
+    "name": "frp",
+    "desc": "reverse proxy",
+    "category": "Advanced Networking",
+    "homepage": "https://github.com/fatedier/frp",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-frp.png",
+    "docs": "https://dietpi.com/docs/software/advanced_networking/#frp",
+    "deps": ""
+  },
+  {
+    "id": 157,
+    "name": "Home Assistant",
+    "desc": "Open source home automation platform",
+    "category": "Home Automation",
+    "homepage": "https://www.home-assistant.io/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-homeautomation-homeassistant.png",
+    "docs": "https://dietpi.com/docs/software/home_automation/#home-assistant",
+    "deps": "217"
+  },
+  {
+    "id": 140,
+    "name": "Domoticz",
+    "desc": "Open source home automation platform",
+    "category": "Home Automation",
+    "homepage": "https://www.domoticz.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-homeautomation-domoticz.jpg",
+    "docs": "https://dietpi.com/docs/software/home_automation/#domoticz",
+    "deps": ""
+  },
+  {
+    "id": 27,
+    "name": "TasmoAdmin",
+    "desc": "Website to manage ESP8266 devices flashed with Tasmota",
+    "category": "Home Automation",
+    "homepage": "https://github.com/reloxx13/TasmoAdmin",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-homeautomation-tasmoadmin.png",
+    "docs": "https://dietpi.com/docs/software/home_automation/#tasmoadmin",
+    "deps": "89 webserver"
+  },
+  {
+    "id": 206,
+    "name": "openHAB",
+    "desc": "Vendor and technology agnostic FLOSS home automation software",
+    "category": "Home Automation",
+    "homepage": "https://www.openhab.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-homeautomation-openhab.jpg",
+    "docs": "https://dietpi.com/docs/software/home_automation/#openhab",
+    "deps": "196"
+  },
+  {
+    "id": 211,
+    "name": "Homebridge",
+    "desc": "Bringing HomeKit support where there is none",
+    "category": "Home Automation",
+    "homepage": "https://homebridge.io/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-homeautomation-homebridge.svg",
+    "docs": "https://dietpi.com/docs/software/home_automation/#homebridge",
+    "deps": ""
+  },
+  {
+    "id": 153,
+    "name": "OctoPrint",
+    "desc": "web interface for controlling 3d printers",
+    "category": "Printing Servers",
+    "homepage": "https://github.com/OctoPrint/OctoPrint",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-printserver-octoprint.png",
+    "docs": "https://dietpi.com/docs/software/printing/#octoprint",
+    "deps": "130"
+  },
+  {
+    "id": 187,
+    "name": "CUPS",
+    "desc": "common UNIX printing system",
+    "category": "Printing Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-printserver-cups.png",
+    "docs": "https://dietpi.com/docs/software/printing/#cups",
+    "deps": "152"
+  },
+  {
+    "id": 2,
+    "name": "Folding@Home",
+    "desc": "Help disease research with your computing power!",
+    "category": "Distributed Projects",
+    "homepage": "https://foldingathome.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-distributed-projects-foldingathome.png",
+    "docs": "https://dietpi.com/docs/software/distributed_projects/#foldinghome",
+    "deps": ""
+  },
+  {
+    "id": 133,
+    "name": "YaCy",
+    "desc": "decentralised open source search engine",
+    "category": "Distributed Projects",
+    "homepage": "https://yacy.net/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-distributed-projects-yacy.png",
+    "docs": "https://dietpi.com/docs/software/distributed_projects/#yacy",
+    "deps": "196"
+  },
+  {
+    "id": 141,
+    "name": "ADS-B Feeder",
+    "desc": "track airplanes using SDRs and feed the data to ADS-B aggregators",
+    "category": "Distributed Projects",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/TAR1090-view.png",
+    "docs": "https://dietpi.com/docs/software/distributed_projects/#adsb-feeder",
+    "deps": "17 134 162' # Git, Docker & Docker Compose"
+  },
+  {
+    "id": 184,
+    "name": "Tor Relay",
+    "desc": "add a node to the Tor network",
+    "category": "Distributed Projects",
+    "homepage": "https://www.torproject.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-tor-logo.png",
+    "docs": "https://dietpi.com/docs/software/distributed_projects/#tor-relay",
+    "deps": ""
+  },
+  {
+    "id": 186,
+    "name": "Kubo",
+    "desc": "(IPFS Node) contribute to a decentralized Internet",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/distributed_projects/#ipfs-node",
+    "deps": ""
+  },
+  {
+    "id": 0,
+    "name": "OpenSSH Client",
+    "desc": "Feature-rich SSH, SFTP and SCP client",
+    "category": "SSH Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-sshserver-openssh.gif",
+    "docs": "https://dietpi.com/docs/software/ssh/#openssh",
+    "deps": ""
+  },
+  {
+    "id": 1,
+    "name": "Samba Client",
+    "desc": "access SMB/CIFS/Samba network shares",
+    "category": "File Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-fileservers-samba.png",
+    "docs": " dietpi-drive_manager > Add network drive",
+    "deps": ""
+  },
+  {
+    "id": 110,
+    "name": "NFS Client",
+    "desc": "network file system client",
+    "category": "File Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-fileservers-nfs.png",
+    "docs": " dietpi-drive_manager > Add network drive",
+    "deps": ""
+  },
+  {
+    "id": 5,
+    "name": "ALSA",
+    "desc": "Advanced Linux Sound Architecture",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/",
+    "deps": ""
+  },
+  {
+    "id": 7,
+    "name": "FFmpeg",
+    "desc": "Audio & video codec library and programs",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/",
+    "deps": ""
+  },
+  {
+    "id": 6,
+    "name": "X11",
+    "desc": "X.Org X Window System implementation",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/",
+    "deps": ""
+  },
+  {
+    "id": 170,
+    "name": "UnRAR",
+    "desc": "unarchiver for .rar files",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/",
+    "deps": ""
+  },
+  {
+    "id": 4,
+    "name": "fish",
+    "desc": "friendly interactive shell",
+    "category": "System Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-system-fish.png",
+    "docs": "https://dietpi.com/docs/software/system/#fish",
+    "deps": ""
+  },
+  {
+    "id": 87,
+    "name": "SQLite",
+    "desc": "Persistent single-file database system",
+    "category": "Databases & Data Stores",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-sqlite.svg",
+    "docs": "https://dietpi.com/docs/software/databases/#sqlite",
+    "deps": ""
+  },
+  {
+    "id": 88,
+    "name": "MariaDB",
+    "desc": "Persistent cached file-per-table database server",
+    "category": "Databases & Data Stores",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-mariadb.png",
+    "docs": "https://dietpi.com/docs/software/databases/#mariadb",
+    "deps": ""
+  },
+  {
+    "id": 90,
+    "name": "phpMyAdmin",
+    "desc": "Optional MariaDB web interface admin tools",
+    "category": "Databases & Data Stores",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-phpmyadmin.png",
+    "docs": "https://dietpi.com/docs/software/databases/#phpmyadmin",
+    "deps": "88 89 webserver"
+  },
+  {
+    "id": 91,
+    "name": "Redis",
+    "desc": "Volatile in-memory non-SQL database server",
+    "category": "Databases & Data Stores",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/redis-logo.svg",
+    "docs": "https://dietpi.com/docs/software/databases/#redis",
+    "deps": ""
+  },
+  {
+    "id": 74,
+    "name": "InfluxDB",
+    "desc": "Persistent time-series database server",
+    "category": "Databases & Data Stores",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-webstack-influxdb.svg",
+    "docs": "https://dietpi.com/docs/software/databases/#influxdb",
+    "deps": ""
+  },
+  {
+    "id": 194,
+    "name": "PostgreSQL",
+    "desc": "Persistent advanced object-relational database server",
+    "category": "Databases & Data Stores",
+    "homepage": "https://www.postgresql.org/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-postgresql.png",
+    "docs": "https://dietpi.com/docs/software/databases/#postgresql",
+    "deps": ""
+  },
+  {
+    "id": 214,
+    "name": "WhoDB",
+    "desc": "Database management tool with AI-powered chat interface",
+    "category": "Databases & Data Stores",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-databases-whodb.webp",
+    "docs": "https://dietpi.com/docs/software/databases/#whodb",
+    "deps": ""
+  },
+  {
+    "id": 17,
+    "name": "Git",
+    "desc": "Clone and manage Git repositories locally",
+    "category": "Cloud & Backup",
+    "homepage": "https://about.gitea.com/",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-cloud-gitea.jpg",
+    "docs": "https://dietpi.com/docs/software/programming/#git",
+    "deps": ""
+  },
+  {
+    "id": 130,
+    "name": "Python 3",
+    "desc": "Runtime system, venv, and development headers",
+    "category": "Development & Programming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-programming-pythonlogo.png",
+    "docs": "https://dietpi.com/docs/software/programming/#python-3",
+    "deps": ""
+  },
+  {
+    "id": 217,
+    "name": "uv",
+    "desc": "Extremely fast Python package and project manager",
+    "category": "Development & Programming",
+    "homepage": "https://github.com/astral-sh/uv",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/programming/#uv",
+    "deps": ""
+  },
+  {
+    "id": 189,
+    "name": "VSCodium",
+    "desc": "FLOSS version of MS VSCode",
+    "category": "Development & Programming",
+    "homepage": "https://github.com/VSCodium/vscodium",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-programming-vscodium.png",
+    "docs": "https://dietpi.com/docs/software/programming/#vscodium",
+    "deps": "5 6 17"
+  },
+  {
+    "id": 188,
+    "name": "Go",
+    "desc": "Runtime environment and package installer",
+    "category": "Camera & Surveillance",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-camera-birdnet-go-logo.webp",
+    "docs": "https://dietpi.com/docs/software/programming/#go",
+    "deps": "17"
+  },
+  {
+    "id": 8,
+    "name": "Java JDK",
+    "desc": "OpenJDK Development Kit",
+    "category": "Development & Programming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-programming-java.svg",
+    "docs": "https://dietpi.com/docs/software/programming/#java",
+    "deps": "196"
+  },
+  {
+    "id": 196,
+    "name": "Java JRE",
+    "desc": "OpenJDK Runtime Environment",
+    "category": "Development & Programming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-programming-java.svg",
+    "docs": "https://dietpi.com/docs/software/programming/#java",
+    "deps": ""
+  },
+  {
+    "id": 9,
+    "name": "Node.js",
+    "desc": "JavaScript runtime environment",
+    "category": "Development & Programming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-nodejs.jpg",
+    "docs": "https://dietpi.com/docs/software/programming/#nodejs",
+    "deps": ""
+  },
+  {
+    "id": 150,
+    "name": "Mono",
+    "desc": "Runtime libraries and repository",
+    "category": "Development & Programming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-programming-mono.png",
+    "docs": "https://dietpi.com/docs/software/programming/#mono",
+    "deps": ""
+  },
+  {
+    "id": 34,
+    "name": "PHP Composer",
+    "desc": "Package manager for PHP",
+    "category": "Development & Programming",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-php-composer.png",
+    "docs": "https://dietpi.com/docs/software/programming/#php-composer",
+    "deps": "89"
+  },
+  {
+    "id": 113,
+    "name": "Chromium",
+    "desc": "web browser for desktop or autostart",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-desktop-tools-chromium.jpg",
+    "docs": "https://dietpi.com/docs/software/desktop/#chromium",
+    "deps": "5 6"
+  },
+  {
+    "id": 67,
+    "name": "Firefox",
+    "desc": "web browser for desktop",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-firefox.png",
+    "docs": "https://dietpi.com/docs/software/desktop/#firefox",
+    "deps": "5 6"
+  },
+  {
+    "id": 174,
+    "name": "GIMP",
+    "desc": "mspaint on steroids",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-desktop-tools-gimp.jpg",
+    "docs": "https://dietpi.com/docs/software/desktop/#gimp",
+    "deps": "6"
+  },
+  {
+    "id": 175,
+    "name": "Xfce Power Manager",
+    "desc": "with brightness control, recommended for LXDE/LXQt",
+    "category": "Desktops",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-xfce-desktop.jpg",
+    "docs": "https://dietpi.com/docs/software/desktop/#xfce-power-manager",
+    "deps": "6"
+  },
+  {
+    "id": 101,
+    "name": "Logrotate",
+    "desc": "Rotates and compresses old log files in /var/log",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/log_system/#full-logging",
+    "deps": ""
+  },
+  {
+    "id": 102,
+    "name": "Rsyslog",
+    "desc": "Writes system logs (journalctl) as plain text files to /var/log",
+    "category": "General Software",
+    "homepage": "",
+    "imageUrl": "",
+    "docs": "https://dietpi.com/docs/software/log_system/#full-logging",
+    "deps": ""
+  },
+  {
+    "id": 103,
+    "name": "DietPi-RAMlog",
+    "desc": "Makes /var/log a RAM disk, preserves file structure on reboot",
+    "category": "Logging Systems",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-log-system.png",
+    "docs": "https://dietpi.com/docs/software/log_system/#dietpi-ramlog",
+    "deps": ""
+  },
+  {
+    "id": 104,
+    "name": "Dropbear",
+    "desc": "Lightweight SSH server",
+    "category": "SSH Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-sshserver-dropbear.jpg",
+    "docs": "https://dietpi.com/docs/software/ssh/#dropbear",
+    "deps": ""
+  },
+  {
+    "id": 105,
+    "name": "OpenSSH Server",
+    "desc": "Feature-rich SSH server with SFTP and SCP support",
+    "category": "SSH Servers",
+    "homepage": "",
+    "imageUrl": "https://dietpi.com/docs/assets/images/dietpi-software-sshserver-openssh.gif",
+    "docs": "https://dietpi.com/docs/software/ssh/#openssh",
+    "deps": "0"
+  }
+]

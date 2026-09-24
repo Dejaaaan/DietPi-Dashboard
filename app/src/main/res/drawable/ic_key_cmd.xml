@@ -1,0 +1,10 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Apple / Mac Command symbol (Bowen knot / looping square ⌘) -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M7,2A5,5 0 0,0 2,7A5,5 0 0,0 7,12H8V14H7A5,5 0 0,0 2,19A5,5 0 0,0 7,24A5,5 0 0,0 12,19V18H14V19A5,5 0 0,0 19,24A5,5 0 0,0 24,19A5,5 0 0,0 19,14H18V12H19A5,5 0 0,0 24,7A5,5 0 0,0 19,2A5,5 0 0,0 14,7V8H12V7A5,5 0 0,0 7,2M7,4A3,3 0 0,1 10,7V8H7A3,3 0 0,1 4,7A3,3 0 0,1 7,4M19,4A3,3 0 0,1 22,7A3,3 0 0,1 19,10H16V7A3,3 0 0,1 19,4M12,10H14V14H12V10M7,14H10V17A3,3 0 0,1 7,20A3,3 0 0,1 4,17A3,3 0 0,1 7,14M16,14H19A3,3 0 0,1 22,17A3,3 0 0,1 19,20A3,3 0 0,1 16,17V14Z"/>
+</vector>
