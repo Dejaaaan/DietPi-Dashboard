@@ -41,6 +41,10 @@ class DietPiViewModel(private val repository: DietPiRepository) : ViewModel() {
     private val _connectionState = MutableStateFlow<ConnectionState>(ConnectionState.Idle)
     val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
 
+    private val _autoRetryState = MutableStateFlow<AutoRetryState?>(null)
+    val autoRetryState: StateFlow<AutoRetryState?> = _autoRetryState.asStateFlow()
+    private var autoRetryJob: Job? = null
+
     private val _systemStats = MutableStateFlow(SystemStats())
     val systemStats: StateFlow<SystemStats> = _systemStats.asStateFlow()
 
@@ -233,16 +237,115 @@ class DietPiViewModel(private val repository: DietPiRepository) : ViewModel() {
         }
     }
 
+    fun cancelAutoRetry() {
+        autoRetryJob?.cancel()
+        autoRetryJob = null
+        val current = _autoRetryState.value
+        if (current != null) {
+            _autoRetryState.value = current.copy(secondsRemaining = 0, isPaused = true, isRetryingNow = false)
+        }
+    }
+
+    fun scheduleAutoRetry(attempt: Int = 1) {
+        val maxAttempts = 5
+        autoRetryJob?.cancel()
+        if (attempt > maxAttempts) {
+            _autoRetryState.value = AutoRetryState(
+                secondsRemaining = 0,
+                attempt = maxAttempts,
+                maxAttempts = maxAttempts,
+                isRetryingNow = false,
+                isPaused = true
+            )
+            return
+        }
+
+        val delaySeconds = when (attempt) {
+            1 -> 5
+            2 -> 10
+            3 -> 15
+            4 -> 20
+            else -> 30
+        }
+
+        autoRetryJob = viewModelScope.launch {
+            for (sec in delaySeconds downTo 1) {
+                _autoRetryState.value = AutoRetryState(
+                    secondsRemaining = sec,
+                    attempt = attempt,
+                    maxAttempts = maxAttempts,
+                    isRetryingNow = false,
+                    isPaused = false
+                )
+                delay(1000L)
+            }
+
+            _autoRetryState.value = AutoRetryState(
+                secondsRemaining = 0,
+                attempt = attempt,
+                maxAttempts = maxAttempts,
+                isRetryingNow = true,
+                isPaused = false
+            )
+
+            val current = _activeServer.value
+            if (current != null) {
+                val testRes = repository.testServerConnection(current)
+                testRes.fold(
+                    onSuccess = { latency ->
+                        _connectionState.value = ConnectionState.Connected(latency)
+                        _autoRetryState.value = null
+                        try {
+                            fetchDataOnce()
+                        } catch (_: Exception) {}
+                    },
+                    onFailure = { err ->
+                        _connectionState.value = ConnectionState.Error(err.localizedMessage ?: "Connection timed out")
+                        scheduleAutoRetry(attempt + 1)
+                    }
+                )
+            } else {
+                _autoRetryState.value = null
+            }
+        }
+    }
+
     fun refreshAll() {
+        autoRetryJob?.cancel()
         viewModelScope.launch {
+            val current = _activeServer.value
+            if (current == null) {
+                _connectionState.value = ConnectionState.Idle
+                _autoRetryState.value = null
+                return@launch
+            }
             _isRefreshing.value = true
-            fetchDataOnce()
-            _isRefreshing.value = false
+            _connectionState.value = ConnectionState.Connecting
+            try {
+                val testRes = repository.testServerConnection(current)
+                testRes.fold(
+                    onSuccess = { latency ->
+                        _connectionState.value = ConnectionState.Connected(latency)
+                        _autoRetryState.value = null
+                        try {
+                            fetchDataOnce()
+                        } catch (_: Exception) {}
+                    },
+                    onFailure = { err ->
+                        _connectionState.value = ConnectionState.Error(err.localizedMessage ?: "Connection timed out")
+                        scheduleAutoRetry(attempt = 1)
+                    }
+                )
+            } finally {
+                _isRefreshing.value = false
+            }
         }
     }
 
     private fun startPolling() {
         pollingJob?.cancel()
+        autoRetryJob?.cancel()
+        _autoRetryState.value = null
         pollingJob = viewModelScope.launch {
             _connectionState.value = ConnectionState.Connecting
             _isLoadingInitial.value = true
@@ -254,26 +357,45 @@ class DietPiViewModel(private val repository: DietPiRepository) : ViewModel() {
                 testRes.fold(
                     onSuccess = { latency ->
                         _connectionState.value = ConnectionState.Connected(latency)
+                        _autoRetryState.value = null
+                        // Initial full load
+                        try {
+                            fetchDataOnce()
+                        } catch (_: Exception) {
+                        } finally {
+                            _isLoadingInitial.value = false
+                        }
                     },
                     onFailure = { err ->
                         _connectionState.value = ConnectionState.Error(err.localizedMessage ?: "Connection timed out")
+                        _isLoadingInitial.value = false
+                        scheduleAutoRetry(attempt = 1)
                     }
                 )
             } else {
                 _connectionState.value = ConnectionState.Idle
-            }
-
-            // Initial full load
-            try {
-                fetchDataOnce()
-            } finally {
                 _isLoadingInitial.value = false
             }
 
             // Continuous telemetry polling
+            var consecutiveFailures = 0
             while (isActive && _isPollingActive.value) {
                 delay(2000L)
-                fetchTelemetryOnly()
+                if (_connectionState.value is ConnectionState.Connected) {
+                    val statsRes = repository.fetchSystemStats()
+                    if (statsRes.isSuccess) {
+                        consecutiveFailures = 0
+                        statsRes.getOrNull()?.let { updateStats(it) }
+                        repository.fetchProcesses().getOrNull()?.let { _processes.value = it }
+                    } else {
+                        consecutiveFailures++
+                        if (consecutiveFailures >= 3) {
+                            val errMsg = statsRes.exceptionOrNull()?.localizedMessage ?: "Server connection lost"
+                            _connectionState.value = ConnectionState.Error(errMsg)
+                            scheduleAutoRetry(attempt = 1)
+                        }
+                    }
+                }
             }
         }
     }

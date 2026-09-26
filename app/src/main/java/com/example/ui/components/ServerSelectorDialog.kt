@@ -49,7 +49,7 @@ fun ServerSelectorSheet(
     onStartScan: (customSubnet: String?) -> Unit = {},
     onStopScan: () -> Unit = {}
 ) {
-    var serverToEdit by remember { mutableStateOf<ServerEntity?>(serverToEditInitially) }
+    var serverToEdit by remember(serverToEditInitially) { mutableStateOf<ServerEntity?>(serverToEditInitially) }
     var showAddDialog by remember { mutableStateOf(false) }
     var initialAddHost by remember { mutableStateOf<String?>(null) }
     var initialAddPort by remember { mutableStateOf<Int?>(null) }
@@ -521,10 +521,19 @@ fun ServerSelectorSheet(
     serverToEdit?.let { existing ->
         ServerFormDialog(
             server = existing,
-            onDismiss = { serverToEdit = null },
+            onDismiss = {
+                val wasFromBanner = serverToEditInitially != null
+                serverToEdit = null
+                if (wasFromBanner) {
+                    onDismiss()
+                }
+            },
             onSave = { updatedServer ->
                 onUpdateServer(updatedServer)
                 serverToEdit = null
+                if (serverToEditInitially != null) {
+                    onDismiss()
+                }
             },
             onTestConnection = onTestConnection
         )
@@ -620,6 +629,7 @@ fun ServerFormDialog(
                 OutlinedTextField(
                     value = hostInput,
                     onValueChange = { input ->
+                        testResult = null
                         var cleaned = input.trim()
                         if (cleaned.startsWith("https://", ignoreCase = true)) {
                             useHttps = true
@@ -650,7 +660,10 @@ fun ServerFormDialog(
 
                 OutlinedTextField(
                     value = portInput,
-                    onValueChange = { portInput = it },
+                    onValueChange = { 
+                        portInput = it
+                        testResult = null
+                    },
                     label = { Text("Port") },
                     singleLine = true,
                     modifier = Modifier
@@ -660,7 +673,10 @@ fun ServerFormDialog(
 
                 OutlinedTextField(
                     value = password,
-                    onValueChange = { password = it },
+                    onValueChange = { 
+                        password = it
+                        testResult = null
+                    },
                     label = { Text("Password (optional)") },
                     placeholder = { Text("Leave blank if no auth required") },
                     singleLine = true,
@@ -702,7 +718,10 @@ fun ServerFormDialog(
                     }
                     Switch(
                         checked = useHttps,
-                        onCheckedChange = { useHttps = it },
+                        onCheckedChange = { 
+                            useHttps = it
+                            testResult = null
+                        },
                         modifier = Modifier.testTag("server_https_switch")
                     )
                 }
@@ -764,29 +783,56 @@ fun ServerFormDialog(
                         onFailure = { err ->
                             Surface(
                                 shape = RoundedCornerShape(8.dp),
-                                color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.5f),
+                                color = MaterialTheme.colorScheme.errorContainer,
                                 border = CardDefaults.outlinedCardBorder().copy(
                                     brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.error)
                                 ),
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Column(modifier = Modifier.padding(10.dp)) {
+                                Column(modifier = Modifier.padding(12.dp)) {
                                     Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Icon(Icons.Default.Error, contentDescription = null, tint = MaterialTheme.colorScheme.error)
+                                        Icon(Icons.Default.WifiOff, contentDescription = null, tint = MaterialTheme.colorScheme.error)
                                         Spacer(modifier = Modifier.width(8.dp))
                                         Text(
                                             text = "Connection Failed",
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = MaterialTheme.typography.titleSmall,
                                             fontWeight = FontWeight.Bold,
-                                            color = MaterialTheme.colorScheme.error
+                                            color = MaterialTheme.colorScheme.onErrorContainer
                                         )
                                     }
                                     Spacer(modifier = Modifier.height(4.dp))
                                     Text(
                                         text = err.localizedMessage ?: "Could not reach server.",
-                                        style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.sp),
+                                        style = MaterialTheme.typography.bodySmall.copy(
+                                            fontFamily = FontFamily.Monospace,
+                                            fontSize = 11.sp
+                                        ),
                                         color = MaterialTheme.colorScheme.onErrorContainer
                                     )
+                                    Spacer(modifier = Modifier.height(6.dp))
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.End
+                                    ) {
+                                        TextButton(
+                                            onClick = {
+                                                val candidate = buildCandidate()
+                                                isTesting = true
+                                                testResult = null
+                                                coroutineScope.launch {
+                                                    val res = onTestConnection(candidate)
+                                                    isTesting = false
+                                                    testResult = res
+                                                }
+                                            },
+                                            enabled = !isTesting,
+                                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 2.dp)
+                                        ) {
+                                            Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(14.dp))
+                                            Spacer(modifier = Modifier.width(4.dp))
+                                            Text("Retry Test", style = MaterialTheme.typography.labelSmall)
+                                        }
+                                    }
                                 }
                             }
                         }

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.net.http.SslError
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.webkit.*
@@ -36,7 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.data.local.ServerEntity
+import com.example.data.model.AutoRetryState
 import com.example.data.model.ConnectionState
+import com.example.ui.components.ConnectionErrorCard
 
 /**
  * Dedicated Web UI screen embedding the official DietPi-Dashboard web interface.
@@ -55,6 +56,11 @@ fun WebUiScreen(
     cookies: List<okhttp3.Cookie>,
     onOpenServerSelector: () -> Unit,
     modifier: Modifier = Modifier,
+    onRetryConnection: () -> Unit = {},
+    onEditServer: () -> Unit = {},
+    isRetryingConnection: Boolean = false,
+    autoRetryState: AutoRetryState? = null,
+    onCancelAutoRetry: () -> Unit = {},
     isInitializing: Boolean = false,
     reloadTrigger: Long = 0L
 ) {
@@ -299,6 +305,18 @@ fun WebUiScreen(
             )
         }
 
+        if (connectionState is ConnectionState.Error) {
+            ConnectionErrorCard(
+                connectionState = connectionState,
+                onRetryConnection = onRetryConnection,
+                onEditServer = onEditServer,
+                isRetrying = isRetryingConnection,
+                autoRetryState = autoRetryState,
+                onCancelAutoRetry = onCancelAutoRetry,
+                modifier = Modifier.padding(12.dp)
+            )
+        }
+
         if (activeServer == null) {
             if (isInitializing) {
                 Box(
@@ -385,16 +403,6 @@ fun WebUiScreen(
                                 detail: RenderProcessGoneDetail?
                             ): Boolean {
                                 return true
-                            }
-
-                            @SuppressLint("WebViewClientOnReceivedSslError")
-                            override fun onReceivedSslError(
-                                view: WebView?,
-                                handler: SslErrorHandler?,
-                                error: SslError?
-                            ) {
-                                // Allow self-signed SSL certificates commonly used by DietPi Dashboard
-                                handler?.proceed()
                             }
 
                             override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {

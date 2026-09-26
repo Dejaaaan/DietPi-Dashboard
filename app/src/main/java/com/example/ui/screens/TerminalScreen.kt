@@ -44,9 +44,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.R
 import com.example.data.local.ServerEntity
+import com.example.data.model.AutoRetryState
+import com.example.data.model.ConnectionState
 import com.example.data.model.TerminalStatus
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.DietPiViewModel
@@ -103,13 +106,22 @@ fun TerminalScreen(
     onToggleToolbar: () -> Unit = {},
     isInitializing: Boolean = false,
     onToolbarHeightChanged: (Dp) -> Unit = {},
+    connectionState: ConnectionState = ConnectionState.Idle,
+    autoRetryState: AutoRetryState? = null,
+    onRetryConnection: () -> Unit = {},
+    onCancelAutoRetry: () -> Unit = {},
+    onEditServer: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val terminalStatus by viewModel.terminalStatus.collectAsStateWithLifecycle()
     var hasEverConnected by remember(activeServer?.id) { mutableStateOf(false) }
+    var isReconnectingSession by remember { mutableStateOf(false) }
     LaunchedEffect(terminalStatus) {
         if (terminalStatus is TerminalStatus.Connected) {
             hasEverConnected = true
+            isReconnectingSession = false
+        } else if (terminalStatus is TerminalStatus.Error || terminalStatus is TerminalStatus.Disconnected) {
+            isReconnectingSession = false
         }
     }
     LaunchedEffect(isToolbarVisible) {
@@ -220,7 +232,7 @@ fun TerminalScreen(
         com.example.ui.components.NoServerSelectedView(
             icon = Icons.Default.Terminal,
             title = "No Server Selected",
-            description = "Connect to a DietPi node to start an interactive SSH / bash terminal session.",
+            description = "Connect to a DietPi node to start an interactive terminal session.",
             onOpenServerSelector = onOpenServerSelector,
             modifier = modifier.fillMaxSize(),
             testTag = "terminal_no_server_view"
@@ -364,57 +376,155 @@ fun TerminalScreen(
                 )
             }
 
-            // Discreet Reconnect Banner shown only when disconnected after having connected or on explicit error
-            if ((hasEverConnected && terminalStatus is TerminalStatus.Disconnected) || terminalStatus is TerminalStatus.Error) {
-                Surface(
-                    shape = RoundedCornerShape(20.dp),
-                    color = MaterialTheme.colorScheme.errorContainer,
-                    contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                    shadowElevation = 4.dp,
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(top = 12.dp)
-                        .testTag("terminal_reconnect_banner")
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+            // Status and Reconnect Banners at Top Center
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 10.dp)
+                    .zIndex(10f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                // 1. Node Connection / Unreachable Banner
+                if (connectionState is ConnectionState.Error) {
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                        shadowElevation = 4.dp,
+                        modifier = Modifier.testTag("terminal_node_offline_banner")
                     ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable {
-                                webViewRef?.evaluateJavascript("window.resetTerminal();", null)
-                                viewModel.restartTerminalSession()
-                            }
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
                         ) {
-                            Icon(Icons.Default.Refresh, contentDescription = "Reconnect", modifier = Modifier.size(16.dp))
-                            Spacer(modifier = Modifier.width(6.dp))
+                            Icon(
+                                imageVector = Icons.Default.CloudOff,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.size(15.dp)
+                            )
+                            val statusMsg = when {
+                                autoRetryState != null && autoRetryState.isRetryingNow -> "Connecting node..."
+                                autoRetryState != null && !autoRetryState.isPaused && autoRetryState.secondsRemaining > 0 ->
+                                    "Node offline · Retry in ${autoRetryState.secondsRemaining}s"
+                                else -> "Node offline"
+                            }
                             Text(
-                                text = if (terminalStatus is TerminalStatus.Disconnected) "Disconnected · Reconnect" else "Error · Retry",
+                                text = statusMsg,
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Medium
                             )
+                            if (autoRetryState != null && autoRetryState.isRetryingNow) {
+                                CircularProgressIndicator(
+                                    strokeWidth = 2.dp,
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(12.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = "Retry",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .clickable(onClick = onRetryConnection)
+                                        .padding(horizontal = 4.dp, vertical = 2.dp)
+                                )
+                            }
+                            Box(
+                                modifier = Modifier
+                                    .width(1.dp)
+                                    .height(13.dp)
+                                    .background(MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.3f))
+                            )
+                            Text(
+                                text = "Edit",
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .clickable(onClick = onEditServer)
+                                    .padding(horizontal = 4.dp, vertical = 2.dp)
+                            )
                         }
-                        Box(
-                            modifier = Modifier
-                                .width(1.dp)
-                                .height(14.dp)
-                                .background(MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.4f))
-                        )
+                    }
+                }
+
+                // 2. Terminal Session Disconnected / Error Banner
+                if ((hasEverConnected && terminalStatus is TerminalStatus.Disconnected) || terminalStatus is TerminalStatus.Error || isReconnectingSession) {
+                    Surface(
+                        shape = RoundedCornerShape(20.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant,
+                        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        shadowElevation = 4.dp,
+                        modifier = Modifier.testTag("terminal_reconnect_banner")
+                    ) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.clickable {
-                                webViewRef?.evaluateJavascript("window.resetTerminal();", null)
-                                viewModel.resetTerminalShell()
-                            }
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
                         ) {
-                            Text(
-                                text = "Reset Shell (^D)",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.error
-                            )
+                            if (terminalStatus is TerminalStatus.Connecting || isReconnectingSession) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(13.dp),
+                                    strokeWidth = 2.dp,
+                                    color = DietPiGreenPrimary
+                                )
+                                Spacer(modifier = Modifier.width(3.dp))
+                                Text(
+                                    text = "Reconnecting session...",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            } else {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .clickable {
+                                            isReconnectingSession = true
+                                            viewModel.restartTerminalSession()
+                                        }
+                                        .padding(vertical = 2.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Refresh,
+                                        contentDescription = "Reconnect",
+                                        tint = DietPiGreenPrimary,
+                                        modifier = Modifier.size(15.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(5.dp))
+                                    Text(
+                                        text = if (terminalStatus is TerminalStatus.Disconnected) "Session Ended · Reconnect" else "Connection Error · Retry",
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                                Box(
+                                    modifier = Modifier
+                                        .width(1.dp)
+                                        .height(13.dp)
+                                        .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f))
+                                )
+                                Text(
+                                    text = "Reset Shell (^D)",
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier
+                                        .clip(RoundedCornerShape(4.dp))
+                                        .clickable {
+                                            webViewRef?.evaluateJavascript("window.resetTerminal();", null)
+                                            viewModel.resetTerminalShell()
+                                        }
+                                        .padding(horizontal = 4.dp, vertical = 2.dp)
+                                )
+                            }
                         }
                     }
                 }

@@ -144,6 +144,14 @@ sealed interface ConnectionState {
     data class Error(val message: String) : ConnectionState
 }
 
+data class AutoRetryState(
+    val secondsRemaining: Int = 0,
+    val attempt: Int = 0,
+    val maxAttempts: Int = 5,
+    val isRetryingNow: Boolean = false,
+    val isPaused: Boolean = false
+)
+
 sealed interface TerminalStatus {
     object Disconnected : TerminalStatus
     object Connecting : TerminalStatus

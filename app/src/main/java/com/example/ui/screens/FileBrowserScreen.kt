@@ -49,8 +49,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.local.ServerEntity
+import com.example.data.model.AutoRetryState
+import com.example.data.model.ConnectionState
 import com.example.data.model.FileBrowserItem
 import com.example.data.model.FileKind
+import com.example.ui.components.ConnectionErrorCard
 import com.example.ui.components.ListSkeleton
 import com.example.ui.components.MediaPreviewDialog
 import com.example.ui.components.NoServerSelectedView
@@ -73,6 +76,12 @@ fun FileBrowserScreen(
     activeServer: ServerEntity?,
     onOpenServerSelector: () -> Unit,
     isInitializing: Boolean,
+    connectionState: ConnectionState = ConnectionState.Idle,
+    onRetryConnection: () -> Unit = {},
+    onEditServer: () -> Unit = {},
+    isLoadingConnection: Boolean = false,
+    autoRetryState: AutoRetryState? = null,
+    onCancelAutoRetry: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     if (activeServer == null) {
@@ -390,11 +399,28 @@ fun FileBrowserScreen(
             }
         }
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
+            if (connectionState is ConnectionState.Error) {
+                ConnectionErrorCard(
+                    connectionState = connectionState,
+                    onRetryConnection = onRetryConnection,
+                    onEditServer = onEditServer,
+                    isRetrying = isLoadingConnection,
+                    autoRetryState = autoRetryState,
+                    onCancelAutoRetry = onCancelAutoRetry,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
             when {
                 isLoading && items.isEmpty() -> {
                     ListSkeleton(
@@ -404,7 +430,7 @@ fun FileBrowserScreen(
                         testTag = "file_browser_skeleton"
                     )
                 }
-                errorMsg != null && items.isEmpty() -> {
+                errorMsg != null && items.isEmpty() && connectionState !is ConnectionState.Error -> {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -517,6 +543,7 @@ fun FileBrowserScreen(
             }
         }
     }
+}
 
     // Media Preview Dialog (Images, Videos, Audio)
     previewMediaItem?.let { mediaItem ->
@@ -1193,9 +1220,9 @@ fun InAppTextEditor(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Icon(Icons.Default.ErrorOutline, contentDescription = null, tint = Color.Red, modifier = Modifier.size(40.dp))
+                        Icon(Icons.Default.ErrorOutline, contentDescription = null, tint = MaterialTheme.colorScheme.error, modifier = Modifier.size(40.dp))
                         Spacer(modifier = Modifier.height(8.dp))
-                        Text(text = error, color = Color.White, style = MaterialTheme.typography.bodyMedium)
+                        Text(text = error, color = MaterialTheme.colorScheme.onSurface, style = MaterialTheme.typography.bodyMedium)
                         Spacer(modifier = Modifier.height(12.dp))
                         Button(onClick = onRetry) {
                             Text("Retry")

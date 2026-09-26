@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.local.ServerEntity
+import com.example.data.model.AutoRetryState
 import com.example.data.model.ConnectionState
 import com.example.data.model.HostInfo
 import com.example.data.model.PowerOperationState
@@ -46,6 +47,8 @@ fun SystemScreen(
     onEditServer: () -> Unit = {},
     serverNickname: String = "DietPi Server",
     isLoading: Boolean = false,
+    autoRetryState: AutoRetryState? = null,
+    onCancelAutoRetry: () -> Unit = {},
     powerOperationState: PowerOperationState = PowerOperationState.Idle,
     onReboot: () -> Unit = {},
     onPoweroff: () -> Unit = {},
@@ -316,101 +319,14 @@ fun SystemScreen(
         item {
             when (connectionState) {
                 is ConnectionState.Error -> {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .testTag("connection_error_card"),
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.errorContainer
-                        ),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(14.dp),
-                            verticalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
-                                    modifier = Modifier.weight(1f)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Warning,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.error,
-                                        modifier = Modifier.size(24.dp)
-                                    )
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    Text(
-                                        text = "Connection Failed",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        fontWeight = FontWeight.Bold,
-                                        color = MaterialTheme.colorScheme.onErrorContainer
-                                    )
-                                }
-
-                                IconButton(
-                                    onClick = onRetryConnection,
-                                    modifier = Modifier.testTag("retry_connection_button")
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.Refresh,
-                                        contentDescription = "Retry",
-                                        tint = MaterialTheme.colorScheme.onErrorContainer
-                                    )
-                                }
-                            }
-
-                            Text(
-                                text = connectionState.message,
-                                style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
-                                color = MaterialTheme.colorScheme.onErrorContainer
-                            )
-
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                Button(
-                                    onClick = onRetryConnection,
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.error,
-                                        contentColor = MaterialTheme.colorScheme.onError
-                                    ),
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .testTag("retry_connection_banner_button")
-                                ) {
-                                    Icon(Icons.Default.Refresh, contentDescription = null, modifier = Modifier.size(16.dp))
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Text("Retry Connection", style = MaterialTheme.typography.labelMedium)
-                                }
-
-                                OutlinedButton(
-                                    onClick = onEditServer,
-                                    colors = ButtonDefaults.outlinedButtonColors(
-                                        contentColor = MaterialTheme.colorScheme.onErrorContainer
-                                    ),
-                                    border = CardDefaults.outlinedCardBorder().copy(
-                                        brush = androidx.compose.ui.graphics.SolidColor(MaterialTheme.colorScheme.error)
-                                    ),
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .testTag("open_edit_server_button")
-                                ) {
-                                    Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(16.dp))
-                                    Spacer(modifier = Modifier.width(6.dp))
-                                    Text("Edit Node", style = MaterialTheme.typography.labelMedium)
-                                }
-                            }
-                        }
-                    }
+                    ConnectionErrorCard(
+                        connectionState = connectionState,
+                        onRetryConnection = onRetryConnection,
+                        onEditServer = onEditServer,
+                        isRetrying = isLoading,
+                        autoRetryState = autoRetryState,
+                        onCancelAutoRetry = onCancelAutoRetry
+                    )
                 }
                 else -> Unit
             }

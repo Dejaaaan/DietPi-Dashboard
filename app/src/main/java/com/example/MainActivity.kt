@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.local.AppDatabase
 import com.example.data.local.ServerEntity
+import com.example.data.model.AutoRetryState
 import com.example.data.model.ConnectionState
 import com.example.data.repository.DietPiRepository
 import com.example.ui.components.AppHeader
@@ -103,6 +104,7 @@ fun DietPiApp(viewModel: DietPiViewModel) {
     val discoveredNodes by viewModel.discoveredNodes.collectAsStateWithLifecycle()
     val scanStatus by viewModel.scanStatus.collectAsStateWithLifecycle()
     val powerOperationState by viewModel.powerOperationState.collectAsStateWithLifecycle()
+    val autoRetryState by viewModel.autoRetryState.collectAsStateWithLifecycle()
 
     val isInitializing = !isServerInitComplete && activeServer == null
 
@@ -245,6 +247,8 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 },
                                 serverNickname = activeServer?.nickname ?: "DietPi Server",
                                 isLoading = isLoadingInitial || isRefreshing,
+                                autoRetryState = autoRetryState,
+                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 isInitializing = isInitializing,
                                 powerOperationState = powerOperationState,
                                 onReboot = { viewModel.rebootHost() },
@@ -262,7 +266,15 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 activeServer = activeServer,
                                 onOpenServerSelector = { showServerSelector = true },
                                 isLoading = isLoadingInitial || isRefreshing,
+                                autoRetryState = autoRetryState,
+                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 isInitializing = isInitializing,
+                                connectionState = connectionState,
+                                onRetryConnection = { viewModel.refreshAll() },
+                                onEditServer = {
+                                    serverToEditFromBanner = activeServer
+                                    showServerSelector = true
+                                },
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(bottom = innerPadding.calculateBottomPadding())
@@ -274,7 +286,15 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 activeServer = activeServer,
                                 onOpenServerSelector = { showServerSelector = true },
                                 isLoading = isLoadingInitial || isRefreshing,
+                                autoRetryState = autoRetryState,
+                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 isInitializing = isInitializing,
+                                connectionState = connectionState,
+                                onRetryConnection = { viewModel.refreshAll() },
+                                onEditServer = {
+                                    serverToEditFromBanner = activeServer
+                                    showServerSelector = true
+                                },
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(bottom = innerPadding.calculateBottomPadding())
@@ -287,7 +307,15 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 activeServer = activeServer,
                                 onOpenServerSelector = { showServerSelector = true },
                                 isLoading = isLoadingInitial || isRefreshing,
+                                autoRetryState = autoRetryState,
+                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 isInitializing = isInitializing,
+                                connectionState = connectionState,
+                                onRetryConnection = { viewModel.refreshAll() },
+                                onEditServer = {
+                                    serverToEditFromBanner = activeServer
+                                    showServerSelector = true
+                                },
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(bottom = innerPadding.calculateBottomPadding())
@@ -302,6 +330,14 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 onToggleToolbar = { isTerminalToolbarVisible = !isTerminalToolbarVisible },
                                 isInitializing = isInitializing,
                                 onToolbarHeightChanged = { height -> terminalToolbarHeightDp = height },
+                                connectionState = connectionState,
+                                autoRetryState = autoRetryState,
+                                onRetryConnection = { viewModel.refreshAll() },
+                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
+                                onEditServer = {
+                                    serverToEditFromBanner = activeServer
+                                    showServerSelector = true
+                                },
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
@@ -311,6 +347,15 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 activeServer = activeServer,
                                 onOpenServerSelector = { showServerSelector = true },
                                 isInitializing = isInitializing,
+                                connectionState = connectionState,
+                                onRetryConnection = { viewModel.refreshAll() },
+                                onEditServer = {
+                                    serverToEditFromBanner = activeServer
+                                    showServerSelector = true
+                                },
+                                isLoadingConnection = isLoadingInitial || isRefreshing,
+                                autoRetryState = autoRetryState,
+                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(bottom = innerPadding.calculateBottomPadding())
@@ -322,6 +367,14 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 connectionState = connectionState,
                                 cookies = viewModel.getActiveServerCookies(),
                                 onOpenServerSelector = { showServerSelector = true },
+                                onRetryConnection = { viewModel.refreshAll() },
+                                onEditServer = {
+                                    serverToEditFromBanner = activeServer
+                                    showServerSelector = true
+                                },
+                                isRetryingConnection = isLoadingInitial || isRefreshing,
+                                autoRetryState = autoRetryState,
+                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 reloadTrigger = webUiReloadTrigger,
                                 isInitializing = isInitializing,
                                 modifier = Modifier
@@ -349,7 +402,13 @@ fun DietPiApp(viewModel: DietPiViewModel) {
             activeServerId = activeServer?.id,
             onSelectServer = { s -> viewModel.selectServer(s) },
             onAddServer = { s -> viewModel.addServer(s) },
-            onUpdateServer = { s -> viewModel.updateServer(s) },
+            onUpdateServer = { s -> 
+                viewModel.updateServer(s)
+                if (serverToEditFromBanner != null) {
+                    showServerSelector = false
+                    serverToEditFromBanner = null
+                }
+            },
             onDeleteServer = { s -> viewModel.deleteServer(s) },
             onTestConnection = { s -> viewModel.testServer(s) },
             onDismiss = {

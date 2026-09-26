@@ -22,9 +22,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.data.local.ServerEntity
+import com.example.data.model.AutoRetryState
+import com.example.data.model.ConnectionState
 import com.example.data.model.ServiceItem
 import com.example.data.model.ServiceStatus
 import com.example.ui.components.CompactFilterDropdown
+import com.example.ui.components.ConnectionErrorCard
 import com.example.ui.components.ListSkeleton
 import com.example.ui.components.NoServerSelectedView
 import com.example.ui.theme.*
@@ -35,7 +38,12 @@ fun ServicesScreen(
     activeServer: ServerEntity? = null,
     onOpenServerSelector: () -> Unit = {},
     isLoading: Boolean = false,
+    autoRetryState: AutoRetryState? = null,
+    onCancelAutoRetry: () -> Unit = {},
     isInitializing: Boolean = false,
+    connectionState: ConnectionState = ConnectionState.Idle,
+    onRetryConnection: () -> Unit = {},
+    onEditServer: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     if (activeServer == null) {
@@ -81,6 +89,18 @@ fun ServicesScreen(
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(12.dp))
+
+        if (connectionState is ConnectionState.Error) {
+            ConnectionErrorCard(
+                connectionState = connectionState,
+                onRetryConnection = onRetryConnection,
+                onEditServer = onEditServer,
+                isRetrying = isLoading,
+                autoRetryState = autoRetryState,
+                onCancelAutoRetry = onCancelAutoRetry,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+        }
 
         OutlinedTextField(
             value = searchQuery,
