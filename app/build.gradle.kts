@@ -17,8 +17,8 @@ android {
     applicationId = "com.aistudio.dietpidashboard.kxmpzq"
     minSdk = 24
     targetSdk = 36
-    versionCode = 4
-    versionName = "3.1"
+    versionCode = 6
+    versionName = "3.3"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }

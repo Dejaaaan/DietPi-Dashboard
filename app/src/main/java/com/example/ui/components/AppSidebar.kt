@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -42,6 +43,7 @@ fun AppSidebar(
     activeServer: ServerEntity?,
     connectionState: ConnectionState,
     onOpenServerSelector: () -> Unit,
+    onOpenWebDashboard: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -201,6 +203,63 @@ fun AppSidebar(
                     .testTag(tab.tag),
                 colors = NavigationDrawerItemDefaults.colors(
                     selectedContainerColor = DietPiGreenPrimary.copy(alpha = 0.12f),
+                    unselectedContainerColor = Color.Transparent
+                )
+            )
+        }
+
+        if (activeServer != null) {
+            Spacer(modifier = Modifier.height(10.dp))
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = "EXTERNAL TOOLS",
+                style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            )
+
+            NavigationDrawerItem(
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.OpenInBrowser,
+                        contentDescription = "Web Dashboard",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                },
+                label = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Web Dashboard",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.OpenInNew,
+                            contentDescription = null,
+                            modifier = Modifier.size(14.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                        )
+                    }
+                },
+                selected = false,
+                onClick = onOpenWebDashboard,
+                modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 1.dp)
+                    .heightIn(min = 44.dp)
+                    .testTag("sidebar_open_web_dashboard"),
+                colors = NavigationDrawerItemDefaults.colors(
+                    selectedContainerColor = Color.Transparent,
                     unselectedContainerColor = Color.Transparent
                 )
             )

@@ -49,11 +49,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.data.local.ServerEntity
-import com.example.data.model.AutoRetryState
-import com.example.data.model.ConnectionState
 import com.example.data.model.FileBrowserItem
 import com.example.data.model.FileKind
-import com.example.ui.components.ConnectionErrorCard
 import com.example.ui.components.ListSkeleton
 import com.example.ui.components.MediaPreviewDialog
 import com.example.ui.components.NoServerSelectedView
@@ -76,12 +73,6 @@ fun FileBrowserScreen(
     activeServer: ServerEntity?,
     onOpenServerSelector: () -> Unit,
     isInitializing: Boolean,
-    connectionState: ConnectionState = ConnectionState.Idle,
-    onRetryConnection: () -> Unit = {},
-    onEditServer: () -> Unit = {},
-    isLoadingConnection: Boolean = false,
-    autoRetryState: AutoRetryState? = null,
-    onCancelAutoRetry: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     if (activeServer == null) {
@@ -242,10 +233,12 @@ fun FileBrowserScreen(
         viewModel.navigateBack()
     }
 
-    Scaffold(
-        modifier = modifier.fillMaxSize(),
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        topBar = {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -397,24 +390,6 @@ fun FileBrowserScreen(
                     }
                 }
             }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            if (connectionState is ConnectionState.Error) {
-                ConnectionErrorCard(
-                    connectionState = connectionState,
-                    onRetryConnection = onRetryConnection,
-                    onEditServer = onEditServer,
-                    isRetrying = isLoadingConnection,
-                    autoRetryState = autoRetryState,
-                    onCancelAutoRetry = onCancelAutoRetry,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                )
-            }
 
             Box(
                 modifier = Modifier
@@ -430,7 +405,7 @@ fun FileBrowserScreen(
                         testTag = "file_browser_skeleton"
                     )
                 }
-                errorMsg != null && items.isEmpty() && connectionState !is ConnectionState.Error -> {
+                errorMsg != null && items.isEmpty() -> {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -543,6 +518,13 @@ fun FileBrowserScreen(
             }
         }
     }
+
+    SnackbarHost(
+        hostState = snackbarHostState,
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(bottom = 16.dp)
+    )
 }
 
     // Media Preview Dialog (Images, Videos, Audio)
@@ -775,6 +757,11 @@ fun PathBreadcrumbBar(
             }
             list
         }
+    }
+
+    // Auto-scroll horizontally to the deepest active directory segment whenever path changes
+    LaunchedEffect(currentPath, segments.size) {
+        scrollState.animateScrollTo(scrollState.maxValue)
     }
 
     Row(

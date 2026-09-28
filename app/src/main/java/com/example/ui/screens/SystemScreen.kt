@@ -26,8 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.data.local.ServerEntity
-import com.example.data.model.AutoRetryState
-import com.example.data.model.ConnectionState
 import com.example.data.model.HostInfo
 import com.example.data.model.PowerOperationState
 import com.example.data.model.SystemStats
@@ -40,15 +38,10 @@ import java.util.Locale
 fun SystemScreen(
     stats: SystemStats,
     hostInfo: HostInfo,
-    connectionState: ConnectionState,
     onOpenServerSelector: () -> Unit,
-    onRetryConnection: () -> Unit,
     activeServer: ServerEntity? = null,
-    onEditServer: () -> Unit = {},
     serverNickname: String = "DietPi Server",
     isLoading: Boolean = false,
-    autoRetryState: AutoRetryState? = null,
-    onCancelAutoRetry: () -> Unit = {},
     powerOperationState: PowerOperationState = PowerOperationState.Idle,
     onReboot: () -> Unit = {},
     onPoweroff: () -> Unit = {},
@@ -313,22 +306,6 @@ fun SystemScreen(
                         )
                     }
                 }
-            }
-        }
-        // Connection & Status Banner
-        item {
-            when (connectionState) {
-                is ConnectionState.Error -> {
-                    ConnectionErrorCard(
-                        connectionState = connectionState,
-                        onRetryConnection = onRetryConnection,
-                        onEditServer = onEditServer,
-                        isRetrying = isLoading,
-                        autoRetryState = autoRetryState,
-                        onCancelAutoRetry = onCancelAutoRetry
-                    )
-                }
-                else -> Unit
             }
         }
 

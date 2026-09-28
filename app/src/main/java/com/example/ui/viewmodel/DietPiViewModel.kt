@@ -342,6 +342,29 @@ class DietPiViewModel(private val repository: DietPiRepository) : ViewModel() {
         }
     }
 
+    fun onAppForegrounded() {
+        val current = _activeServer.value ?: return
+        if (_connectionState.value is ConnectionState.Error || _connectionState.value is ConnectionState.Idle) {
+            refreshAll()
+        } else if (_isPollingActive.value && pollingJob?.isActive != true) {
+            startPolling()
+        }
+    }
+
+    fun reconnectIfDisconnected() {
+        if (_connectionState.value is ConnectionState.Error && !_isRefreshing.value) {
+            refreshAll()
+        }
+    }
+
+    fun switchActiveServerToHttp() {
+        val current = _activeServer.value ?: return
+        if (current.useHttps) {
+            val updated = current.copy(useHttps = false)
+            updateServer(updated)
+        }
+    }
+
     private fun startPolling() {
         pollingJob?.cancel()
         autoRetryJob?.cancel()

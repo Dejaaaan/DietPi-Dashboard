@@ -70,20 +70,17 @@ class DietPiUnitTest {
     @Test
     fun testMainTabsConfiguration() {
         val tabs = MainTab.values()
-        assertEquals(7, tabs.size)
+        assertEquals(6, tabs.size)
         assertTrue(tabs.any { it == MainTab.SYSTEM })
         assertTrue(tabs.any { it == MainTab.PROCESSES })
         assertTrue(tabs.any { it == MainTab.SERVICES })
         assertTrue(tabs.any { it == MainTab.SOFTWARE })
         assertTrue(tabs.any { it == MainTab.TERMINAL })
         assertTrue(tabs.any { it == MainTab.FILE_BROWSER })
-        assertTrue(tabs.any { it == MainTab.WEB_UI })
         assertEquals("tab_terminal", MainTab.TERMINAL.tag)
         assertEquals("Terminal", MainTab.TERMINAL.title)
         assertEquals("tab_file_browser", MainTab.FILE_BROWSER.tag)
         assertEquals("Files", MainTab.FILE_BROWSER.title)
-        assertEquals("tab_web_ui", MainTab.WEB_UI.tag)
-        assertEquals("Web UI", MainTab.WEB_UI.title)
     }
 
     @Test
@@ -119,7 +116,7 @@ class DietPiUnitTest {
     @Test
     fun testSidebarAndHeaderTags() {
         // Ensure all MainTab tags are defined consistently for sidebar navigation
-        val expectedTags = listOf("tab_system", "tab_processes", "tab_services", "tab_software", "tab_terminal", "tab_file_browser", "tab_web_ui")
+        val expectedTags = listOf("tab_system", "tab_processes", "tab_services", "tab_software", "tab_terminal", "tab_file_browser")
         val actualTags = MainTab.values().map { it.tag }
         assertEquals(expectedTags, actualTags)
     }
@@ -206,7 +203,7 @@ class DietPiUnitTest {
 
     @Test
     fun testMainTabEnumValues() {
-        assertEquals(7, com.example.MainTab.values().size)
+        assertEquals(6, com.example.MainTab.values().size)
         assertEquals(com.example.MainTab.SYSTEM, com.example.MainTab.valueOf("SYSTEM"))
         assertEquals(com.example.MainTab.FILE_BROWSER, com.example.MainTab.valueOf("FILE_BROWSER"))
     }

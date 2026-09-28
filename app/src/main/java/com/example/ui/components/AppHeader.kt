@@ -56,6 +56,7 @@ fun AppHeader(
     onTerminalRedraw: () -> Unit = {},
     onTerminalReset: () -> Unit = {},
     onTerminalReload: () -> Unit = {},
+    onOpenWebDashboard: () -> Unit = {},
     isInitializing: Boolean = false,
     modifier: Modifier = Modifier
 ) {
@@ -199,24 +200,38 @@ fun AppHeader(
                         }
                     }
 
-                    // REST Metrics tabs: Polling Pause / Resume
-                    when (currentTab) {
-                        MainTab.SYSTEM, MainTab.PROCESSES, MainTab.SERVICES, MainTab.SOFTWARE -> {
-                            IconButton(
-                                onClick = onTogglePolling,
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .testTag("toggle_polling_button")
-                                ) {
-                                Icon(
-                                    imageVector = if (isPollingActive) Icons.Default.PauseCircle else Icons.Default.PlayCircle,
-                                    contentDescription = if (isPollingActive) "Pause Polling" else "Resume Polling",
-                                    tint = if (isPollingActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
+                    // Live telemetry tabs: Polling Pause / Resume (only System & Processes poll continuously)
+                    if (currentTab == MainTab.SYSTEM || currentTab == MainTab.PROCESSES) {
+                        IconButton(
+                            onClick = onTogglePolling,
+                            modifier = Modifier
+                                .size(36.dp)
+                                .testTag("toggle_polling_button")
+                        ) {
+                            Icon(
+                                imageVector = if (isPollingActive) Icons.Default.PauseCircle else Icons.Default.PlayCircle,
+                                contentDescription = if (isPollingActive) "Pause Live Polling" else "Resume Live Polling",
+                                tint = if (isPollingActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(20.dp)
+                            )
                         }
-                        else -> {}
+                    }
+
+                    // Open Web Dashboard in external browser button (Chrome/Firefox)
+                    if (activeServer != null) {
+                        IconButton(
+                            onClick = onOpenWebDashboard,
+                            modifier = Modifier
+                                .size(38.dp)
+                                .testTag("open_web_dashboard_header_button")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.OpenInBrowser,
+                                contentDescription = "Open Web Dashboard in Browser",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(20.dp)
+                            )
+                        }
                     }
 
                     // Universal Refresh Button for ALL tabs (always at the far right corner)

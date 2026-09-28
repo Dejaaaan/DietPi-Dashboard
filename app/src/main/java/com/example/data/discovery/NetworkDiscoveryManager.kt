@@ -30,10 +30,12 @@ import javax.net.ssl.X509TrustManager
 data class DiscoveredDietPi(
     val host: String,
     val port: Int = 5252,
-    val name: String = "DietPi Node",
+    val name: String = "Server Node",
     val discoveryMethod: String = "Auto-Discovered",
     val useHttps: Boolean = false,
-    val isDashboardReady: Boolean = true
+    val isDashboardReady: Boolean = true,
+    val resolvedIp: String? = null,
+    val isConfirmedDietPi: Boolean = false
 )
 
 class NetworkDiscoveryManager(private val context: Context) {
@@ -184,80 +186,50 @@ class NetworkDiscoveryManager(private val context: Context) {
     }
 
     /**
-     * Probes an IP: first checks fast TCP socket on port 5252 (dashboard) and port 22 (SSH).
-     * If 5252 is open, probes HTTP/HTTPS for DietPi Dashboard.
-     * If 22 is open, checks Dropbear/OpenSSH banner.
+     * Probes an IP on port 5252 (official DietPi Dashboard port).
+     * If port 5252 is open, tests HTTPS/HTTP for Dashboard responsiveness
+     * and checks whether the response is verified DietPi or another service.
      */
     private fun probeIpCandidate(ip: String) {
         try {
             // Fast socket test for DietPi Dashboard default port (5252)
-            val port5252Open = isPortOpen(ip, 5252, timeoutMs = 300)
-            if (port5252Open) {
-                // Test HTTPS first on port 5252
-                if (testDashboardHttp(ip, 5252, useHttps = true)) {
-                    addDiscoveredNode(
-                        DiscoveredDietPi(
-                            host = ip,
-                            port = 5252,
-                            name = "DietPi ($ip)",
-                            discoveryMethod = "Port 5252 (HTTPS)",
-                            useHttps = true,
-                            isDashboardReady = true
-                        )
-                    )
-                    return
-                } else if (testDashboardHttp(ip, 5252, useHttps = false)) {
-                    addDiscoveredNode(
-                        DiscoveredDietPi(
-                            host = ip,
-                            port = 5252,
-                            name = "DietPi ($ip)",
-                            discoveryMethod = "Port 5252 (HTTP)",
-                            useHttps = false,
-                            isDashboardReady = true
-                        )
-                    )
-                    return
-                }
+            if (!isPortOpen(ip, 5252, timeoutMs = 300)) {
+                return
             }
 
-            // If 5252 is not open, check if SSH (port 22) is open to identify DietPi host
-            val port22Open = isPortOpen(ip, 22, timeoutMs = 250)
-            if (port22Open) {
-                val banner = readSshBanner(ip, 22, timeoutMs = 350)
-                if (banner != null && isDietPiOrLinuxBanner(banner)) {
-                    // Check if dashboard or web is on port 80 or 8080
-                    val altPort = when {
-                        isPortOpen(ip, 80, 200) -> 80
-                        isPortOpen(ip, 8080, 200) -> 8080
-                        else -> null
-                    }
+            // Test HTTPS first on port 5252
+            val httpsConfirmed = testDashboardHttp(ip, 5252, useHttps = true)
+            if (httpsConfirmed != null) {
+                addDiscoveredNode(
+                    DiscoveredDietPi(
+                        host = ip,
+                        port = 5252,
+                        name = if (httpsConfirmed) "DietPi ($ip)" else "Server ($ip)",
+                        discoveryMethod = "Port 5252 (HTTPS)",
+                        useHttps = true,
+                        isDashboardReady = true,
+                        resolvedIp = ip,
+                        isConfirmedDietPi = httpsConfirmed
+                    )
+                )
+                return
+            }
 
-                    if (altPort != null && testDashboardHttp(ip, altPort, useHttps = false)) {
-                        addDiscoveredNode(
-                            DiscoveredDietPi(
-                                host = ip,
-                                port = altPort,
-                                name = "DietPi ($ip)",
-                                discoveryMethod = "Web Port $altPort",
-                                useHttps = false,
-                                isDashboardReady = true
-                            )
-                        )
-                    } else {
-                        // DietPi host discovered via SSH (Dropbear/Debian)
-                        addDiscoveredNode(
-                            DiscoveredDietPi(
-                                host = ip,
-                                port = 5252,
-                                name = "DietPi Host ($ip)",
-                                discoveryMethod = "SSH Port 22",
-                                useHttps = false,
-                                isDashboardReady = false
-                            )
-                        )
-                    }
-                }
+            // Test HTTP on port 5252
+            val httpConfirmed = testDashboardHttp(ip, 5252, useHttps = false)
+            if (httpConfirmed != null) {
+                addDiscoveredNode(
+                    DiscoveredDietPi(
+                        host = ip,
+                        port = 5252,
+                        name = if (httpConfirmed) "DietPi ($ip)" else "Server ($ip)",
+                        discoveryMethod = "Port 5252 (HTTP)",
+                        useHttps = false,
+                        isDashboardReady = true,
+                        resolvedIp = ip,
+                        isConfirmedDietPi = httpConfirmed
+                    )
+                )
             }
         } catch (_: Exception) {}
     }
@@ -272,44 +244,58 @@ class NetworkDiscoveryManager(private val context: Context) {
 
             // Test port 5252
             if (isPortOpen(host, 5252, 600) || isPortOpen(ip, 5252, 600)) {
-                // Test HTTPS first on port 5252 using both host and ip to handle SNI / TLS certs
-                if (testDashboardHttp(host, 5252, useHttps = true) || testDashboardHttp(ip, 5252, useHttps = true)) {
+                val httpsConfirmed = testDashboardHttp(host, 5252, useHttps = true)
+                    ?: testDashboardHttp(ip, 5252, useHttps = true)
+
+                if (httpsConfirmed != null) {
                     addDiscoveredNode(
                         DiscoveredDietPi(
                             host = host,
                             port = 5252,
-                            name = label,
+                            name = if (httpsConfirmed) label else host,
                             discoveryMethod = "DNS Hostname (HTTPS)",
                             useHttps = true,
-                            isDashboardReady = true
+                            isDashboardReady = true,
+                            resolvedIp = ip,
+                            isConfirmedDietPi = httpsConfirmed
                         )
                     )
                     return
-                } else if (testDashboardHttp(host, 5252, useHttps = false) || testDashboardHttp(ip, 5252, useHttps = false)) {
+                }
+
+                val httpConfirmed = testDashboardHttp(host, 5252, useHttps = false)
+                    ?: testDashboardHttp(ip, 5252, useHttps = false)
+
+                if (httpConfirmed != null) {
                     addDiscoveredNode(
                         DiscoveredDietPi(
                             host = host,
                             port = 5252,
-                            name = label,
+                            name = if (httpConfirmed) label else host,
                             discoveryMethod = "DNS Hostname (HTTP)",
                             useHttps = false,
-                            isDashboardReady = true
+                            isDashboardReady = true,
+                            resolvedIp = ip,
+                            isConfirmedDietPi = httpConfirmed
                         )
                     )
                     return
                 }
             }
 
-            // Test SSH port 22
-            if (isPortOpen(host, 22, 500) || isPortOpen(ip, 22, 500)) {
+            // Only check SSH port 22 if the hostname explicitly contains "dietpi" (e.g. dietpi.local)
+            // to notify the user if DietPi OS is present but the dashboard is not yet installed.
+            if (host.contains("dietpi", ignoreCase = true) && (isPortOpen(host, 22, 500) || isPortOpen(ip, 22, 500))) {
                 addDiscoveredNode(
                     DiscoveredDietPi(
                         host = host,
                         port = 5252,
-                        name = label,
-                        discoveryMethod = "DNS Hostname",
+                        name = "$label (No Dashboard)",
+                        discoveryMethod = "SSH Port 22 (Dashboard not installed)",
                         useHttps = false,
-                        isDashboardReady = false
+                        isDashboardReady = false,
+                        resolvedIp = ip,
+                        isConfirmedDietPi = true
                     )
                 )
             }
@@ -331,30 +317,10 @@ class NetworkDiscoveryManager(private val context: Context) {
     }
 
     /**
-     * Reads SSH banner from port 22 (e.g., "SSH-2.0-dropbear..." or "SSH-2.0-OpenSSH_... Debian...")
+     * Checks if endpoint responds with DietPi Dashboard headers, title, or JSON status.
+     * Returns true if confirmed DietPi, false if HTTP responded on port but unconfirmed DietPi, or null if unreachable.
      */
-    private fun readSshBanner(host: String, port: Int = 22, timeoutMs: Int = 350): String? {
-        return try {
-            Socket().use { socket ->
-                socket.soTimeout = timeoutMs
-                socket.connect(InetSocketAddress(host, port), timeoutMs)
-                val reader = socket.getInputStream().bufferedReader(Charsets.US_ASCII)
-                reader.readLine()
-            }
-        } catch (_: Exception) {
-            null
-        }
-    }
-
-    private fun isDietPiOrLinuxBanner(banner: String): Boolean {
-        val b = banner.lowercase()
-        return b.contains("dropbear") || b.contains("dietpi") || b.contains("debian") || b.contains("openssh")
-    }
-
-    /**
-     * Checks if endpoint responds with DietPi Dashboard headers, login page, or status
-     */
-    private fun testDashboardHttp(host: String, port: Int, useHttps: Boolean): Boolean {
+    private fun testDashboardHttp(host: String, port: Int, useHttps: Boolean): Boolean? {
         val scheme = if (useHttps) "https" else "http"
         val testPaths = listOf("/", "/login", "/system")
 
@@ -367,34 +333,56 @@ class NetworkDiscoveryManager(private val context: Context) {
 
                 probeClient.newCall(request).execute().use { response ->
                     val code = response.code
-                    val body = try { response.peekBody(1024 * 16).string() } catch (_: Exception) { "" }
+                    if (code in 200..499) {
+                        val body = try { response.peekBody(1024 * 16).string() } catch (_: Exception) { "" }
+                        val serverHeader = response.header("Server") ?: ""
+                        val title = Regex("<title>(.*?)</title>", RegexOption.IGNORE_CASE).find(body)?.groupValues?.get(1) ?: ""
 
-                    val isDietPi = body.contains("DietPi", ignoreCase = true) ||
-                            response.header("Server")?.contains("DietPi", ignoreCase = true) == true ||
-                            body.contains("login", ignoreCase = true) ||
-                            code in 200..399 || code in listOf(401, 403)
+                        val isConfirmedDietPi = body.contains("DietPi", ignoreCase = true) ||
+                                serverHeader.contains("DietPi", ignoreCase = true) ||
+                                title.contains("DietPi", ignoreCase = true) ||
+                                body.contains("dietpi-dashboard", ignoreCase = true)
 
-                    if (isDietPi) return true
+                        return isConfirmedDietPi
+                    }
                 }
             } catch (_: Exception) {}
         }
-        return false
+        return null
     }
 
     @Synchronized
     private fun addDiscoveredNode(node: DiscoveredDietPi) {
         val current = _discoveredNodes.value.toMutableList()
-        val existingIndex = current.indexOfFirst {
-            it.host.equals(node.host, ignoreCase = true)
+        val existingIndex = current.indexOfFirst { existing ->
+            existing.host.equals(node.host, ignoreCase = true) ||
+            (existing.resolvedIp != null && existing.resolvedIp.equals(node.resolvedIp, ignoreCase = true)) ||
+            (existing.resolvedIp != null && existing.resolvedIp.equals(node.host, ignoreCase = true)) ||
+            (node.resolvedIp != null && existing.host.equals(node.resolvedIp, ignoreCase = true))
         }
 
         if (existingIndex >= 0) {
-            // Upgrade node if current has more capabilities (e.g. dashboard ready or HTTPS confirmed)
             val existing = current[existingIndex]
-            if ((!existing.isDashboardReady && node.isDashboardReady) || (!existing.useHttps && node.useHttps)) {
-                current[existingIndex] = node
-                _discoveredNodes.value = current
-            }
+            // Prefer friendly hostname (e.g. dietpi.local) over raw IP if available
+            val isExistingIp = existing.host.matches(Regex("""\d+\.\d+\.\d+\.\d+"""))
+            val isNewIp = node.host.matches(Regex("""\d+\.\d+\.\d+\.\d+"""))
+
+            val preferredHost = if (isExistingIp && !isNewIp) node.host else existing.host
+            val preferredIp = node.resolvedIp ?: existing.resolvedIp
+            val preferredName = if (node.isConfirmedDietPi && !existing.isConfirmedDietPi) node.name else existing.name
+            val preferredMethod = if (node.isDashboardReady && !existing.isDashboardReady) node.discoveryMethod else existing.discoveryMethod
+
+            current[existingIndex] = existing.copy(
+                host = preferredHost,
+                resolvedIp = preferredIp,
+                port = if (node.isDashboardReady) node.port else existing.port,
+                name = preferredName,
+                discoveryMethod = preferredMethod,
+                useHttps = existing.useHttps || node.useHttps,
+                isDashboardReady = existing.isDashboardReady || node.isDashboardReady,
+                isConfirmedDietPi = existing.isConfirmedDietPi || node.isConfirmedDietPi
+            )
+            _discoveredNodes.value = current
         } else {
             current.add(node)
             _discoveredNodes.value = current
@@ -403,10 +391,10 @@ class NetworkDiscoveryManager(private val context: Context) {
     }
 
     /**
-     * Starts mDNS / NSD listeners for _http._tcp., _ssh._tcp., and _workstation._tcp.
+     * Starts mDNS / NSD listeners for _http._tcp. and _dietpi-dashboard._tcp.
      */
     private fun startNsdDiscovery() {
-        val serviceTypes = listOf("_http._tcp.", "_ssh._tcp.", "_workstation._tcp.")
+        val serviceTypes = listOf("_http._tcp.", "_dietpi-dashboard._tcp.")
         for (serviceType in serviceTypes) {
             try {
                 val listener = object : NsdManager.DiscoveryListener {
@@ -430,9 +418,7 @@ class NetworkDiscoveryManager(private val context: Context) {
                         if (serviceInfo == null) return
                         val name = serviceInfo.serviceName ?: ""
                         val isDietPiCandidate = name.contains("dietpi", ignoreCase = true) ||
-                                name.contains("dashboard", ignoreCase = true) ||
-                                serviceType == "_ssh._tcp." ||
-                                serviceType == "_workstation._tcp."
+                                name.contains("dashboard", ignoreCase = true)
 
                         if (isDietPiCandidate) {
                             resolveNsdServiceSafely(serviceInfo)

@@ -15,6 +15,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -39,7 +40,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.zIndex
 import com.example.data.local.AppDatabase
 import com.example.data.local.ServerEntity
 import com.example.data.model.AutoRetryState
@@ -47,6 +52,7 @@ import com.example.data.model.ConnectionState
 import com.example.data.repository.DietPiRepository
 import com.example.ui.components.AppHeader
 import com.example.ui.components.AppSidebar
+import com.example.ui.components.ConnectionErrorCard
 import com.example.ui.components.FloatingScreenSwitcher
 import com.example.ui.components.ServerSelectorSheet
 import com.example.ui.screens.*
@@ -61,8 +67,7 @@ enum class MainTab(val title: String, val icon: ImageVector, val tag: String) {
     SERVICES("Services", Icons.Default.Settings, "tab_services"),
     SOFTWARE("Software", Icons.Default.Apps, "tab_software"),
     TERMINAL("Terminal", Icons.Default.Terminal, "tab_terminal"),
-    FILE_BROWSER("Files", Icons.Default.Folder, "tab_file_browser"),
-    WEB_UI("Web UI", Icons.Default.Language, "tab_web_ui")
+    FILE_BROWSER("Files", Icons.Default.Folder, "tab_file_browser")
 }
 
 class MainActivity : ComponentActivity() {
@@ -131,15 +136,37 @@ fun DietPiApp(viewModel: DietPiViewModel) {
 
     var showServerSelector by remember { mutableStateOf(false) }
     var serverToEditFromBanner by remember { mutableStateOf<ServerEntity?>(null) }
-    var webUiReloadTrigger by remember { mutableLongStateOf(0L) }
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     var isTerminalToolbarVisible by rememberSaveable { mutableStateOf(true) }
     var terminalToolbarHeightDp by remember { mutableStateOf(0.dp) }
 
+    val onOpenWebDashboard: () -> Unit = {
+        activeServer?.let { server ->
+            try {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(server.baseUrl))
+                context.startActivity(intent)
+            } catch (_: Exception) {}
+        }
+    }
+
+    // Auto-reconnect when app regains focus from background/screen lock
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                viewModel.onAppForegrounded()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     // Edge swipe detection: require gesture to start within edge margin (28.dp) to open drawer,
-    // preventing accidental triggers while scrolling content or WebUI
+    // preventing accidental triggers while scrolling content
     val density = LocalDensity.current
     val edgeSwipeThresholdPx = remember(density) { with(density) { 28.dp.toPx() } }
     var isEdgeSwipeActive by remember { mutableStateOf(false) }
@@ -182,6 +209,10 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                     onOpenServerSelector = {
                         coroutineScope.launch { drawerState.close() }
                         showServerSelector = true
+                    },
+                    onOpenWebDashboard = {
+                        coroutineScope.launch { drawerState.close() }
+                        onOpenWebDashboard()
                     }
                 )
             }
@@ -208,7 +239,6 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                         when (currentTab) {
                             MainTab.TERMINAL -> viewModel.refreshTerminalTab()
                             MainTab.FILE_BROWSER -> viewModel.loadDirectory()
-                            MainTab.WEB_UI -> webUiReloadTrigger = System.currentTimeMillis()
                             else -> viewModel.refreshAll()
                         }
                     },
@@ -218,14 +248,25 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                     onTerminalRedraw = { viewModel.triggerTerminalRedraw() },
                     onTerminalReset = { viewModel.triggerTerminalReset() },
                     onTerminalReload = { viewModel.triggerTerminalReload() },
+                    onOpenWebDashboard = onOpenWebDashboard,
                     isInitializing = isInitializing
                 )
             }
         ) { innerPadding ->
+            val isDisconnected = connectionState is ConnectionState.Error
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(top = innerPadding.calculateTopPadding())
+                    .then(
+                        if (isDisconnected && !isLoadingInitial && !isRefreshing) {
+                            Modifier.pointerInput(connectionState) {
+                                detectTapGestures {
+                                    viewModel.reconnectIfDisconnected()
+                                }
+                            }
+                        } else Modifier
+                    )
             ) {
                 Crossfade(
                     targetState = currentTab,
@@ -237,18 +278,10 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                             SystemScreen(
                                 stats = stats,
                                 hostInfo = hostInfo,
-                                connectionState = connectionState,
                                 onOpenServerSelector = { showServerSelector = true },
-                                onRetryConnection = { viewModel.refreshAll() },
                                 activeServer = activeServer,
-                                onEditServer = {
-                                    serverToEditFromBanner = activeServer
-                                    showServerSelector = true
-                                },
                                 serverNickname = activeServer?.nickname ?: "DietPi Server",
                                 isLoading = isLoadingInitial || isRefreshing,
-                                autoRetryState = autoRetryState,
-                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 isInitializing = isInitializing,
                                 powerOperationState = powerOperationState,
                                 onReboot = { viewModel.rebootHost() },
@@ -266,15 +299,7 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 activeServer = activeServer,
                                 onOpenServerSelector = { showServerSelector = true },
                                 isLoading = isLoadingInitial || isRefreshing,
-                                autoRetryState = autoRetryState,
-                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 isInitializing = isInitializing,
-                                connectionState = connectionState,
-                                onRetryConnection = { viewModel.refreshAll() },
-                                onEditServer = {
-                                    serverToEditFromBanner = activeServer
-                                    showServerSelector = true
-                                },
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(bottom = innerPadding.calculateBottomPadding())
@@ -286,15 +311,7 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 activeServer = activeServer,
                                 onOpenServerSelector = { showServerSelector = true },
                                 isLoading = isLoadingInitial || isRefreshing,
-                                autoRetryState = autoRetryState,
-                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 isInitializing = isInitializing,
-                                connectionState = connectionState,
-                                onRetryConnection = { viewModel.refreshAll() },
-                                onEditServer = {
-                                    serverToEditFromBanner = activeServer
-                                    showServerSelector = true
-                                },
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(bottom = innerPadding.calculateBottomPadding())
@@ -307,15 +324,7 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 activeServer = activeServer,
                                 onOpenServerSelector = { showServerSelector = true },
                                 isLoading = isLoadingInitial || isRefreshing,
-                                autoRetryState = autoRetryState,
-                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 isInitializing = isInitializing,
-                                connectionState = connectionState,
-                                onRetryConnection = { viewModel.refreshAll() },
-                                onEditServer = {
-                                    serverToEditFromBanner = activeServer
-                                    showServerSelector = true
-                                },
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(bottom = innerPadding.calculateBottomPadding())
@@ -330,14 +339,6 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 onToggleToolbar = { isTerminalToolbarVisible = !isTerminalToolbarVisible },
                                 isInitializing = isInitializing,
                                 onToolbarHeightChanged = { height -> terminalToolbarHeightDp = height },
-                                connectionState = connectionState,
-                                autoRetryState = autoRetryState,
-                                onRetryConnection = { viewModel.refreshAll() },
-                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
-                                onEditServer = {
-                                    serverToEditFromBanner = activeServer
-                                    showServerSelector = true
-                                },
                                 modifier = Modifier.fillMaxSize()
                             )
                         }
@@ -347,41 +348,34 @@ fun DietPiApp(viewModel: DietPiViewModel) {
                                 activeServer = activeServer,
                                 onOpenServerSelector = { showServerSelector = true },
                                 isInitializing = isInitializing,
-                                connectionState = connectionState,
-                                onRetryConnection = { viewModel.refreshAll() },
-                                onEditServer = {
-                                    serverToEditFromBanner = activeServer
-                                    showServerSelector = true
-                                },
-                                isLoadingConnection = isLoadingInitial || isRefreshing,
-                                autoRetryState = autoRetryState,
-                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(bottom = innerPadding.calculateBottomPadding())
                             )
                         }
-                        MainTab.WEB_UI -> {
-                            WebUiScreen(
-                                activeServer = activeServer,
-                                connectionState = connectionState,
-                                cookies = viewModel.getActiveServerCookies(),
-                                onOpenServerSelector = { showServerSelector = true },
-                                onRetryConnection = { viewModel.refreshAll() },
-                                onEditServer = {
-                                    serverToEditFromBanner = activeServer
-                                    showServerSelector = true
-                                },
-                                isRetryingConnection = isLoadingInitial || isRefreshing,
-                                autoRetryState = autoRetryState,
-                                onCancelAutoRetry = { viewModel.cancelAutoRetry() },
-                                reloadTrigger = webUiReloadTrigger,
-                                isInitializing = isInitializing,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(bottom = innerPadding.calculateBottomPadding())
-                            )
-                        }
+                    }
+                }
+
+                // Global floating connection error pill overlay (consistent position, floats above content across all screens)
+                val currentConnectionState = connectionState
+                if (currentConnectionState is ConnectionState.Error) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(top = 10.dp)
+                            .zIndex(20f)
+                    ) {
+                        ConnectionErrorCard(
+                            connectionState = currentConnectionState,
+                            onRetryConnection = { viewModel.refreshAll() },
+                            onEditServer = {
+                                serverToEditFromBanner = activeServer
+                                showServerSelector = true
+                            },
+                            isRetrying = autoRetryState?.isRetryingNow == true || isLoadingInitial || isRefreshing,
+                            autoRetryState = autoRetryState,
+                            onCancelAutoRetry = { viewModel.cancelAutoRetry() }
+                        )
                     }
                 }
 

@@ -58,6 +58,13 @@ fun ServerSelectorSheet(
     var showCustomSubnetInput by remember { mutableStateOf(false) }
     var customSubnetText by remember { mutableStateOf("") }
 
+    // Automatically start local network search on opening if no servers are configured
+    LaunchedEffect(servers.isEmpty()) {
+        if (servers.isEmpty() && !isScanningNetwork) {
+            onStartScan(null)
+        }
+    }
+
     ModalBottomSheet(
         onDismissRequest = {
             onStopScan()
@@ -290,23 +297,39 @@ fun ServerSelectorSheet(
                 }
 
                 items(discoveredNodes, key = { "discovered_${it.host}_${it.port}" }) { node ->
-                    val matched = servers.find { it.host.equals(node.host, ignoreCase = true) }
+                    val matched = servers.find { 
+                        it.host.equals(node.host, ignoreCase = true) ||
+                        (node.resolvedIp != null && it.host.equals(node.resolvedIp, ignoreCase = true))
+                    }
                     val isAlreadySaved = matched != null
                     val isSelected = matched != null && matched.id == activeServerId
 
                     val scheme = if (node.useHttps) "https" else "http"
-                    val formattedUrl = "$scheme://${node.host}:${node.port}"
+                    val formattedUrl = if (node.isDashboardReady) {
+                        "$scheme://${node.host}:${node.port}"
+                    } else {
+                        "${node.host} (Port 22 SSH only)"
+                    }
+                    val subtitleText = if (node.resolvedIp != null && !node.host.equals(node.resolvedIp, ignoreCase = true)) {
+                        "$formattedUrl  ·  ${node.resolvedIp}"
+                    } else {
+                        formattedUrl
+                    }
 
                     val badges = buildList {
-                        if (node.useHttps) add("HTTPS") else add("HTTP")
-                        if (!node.isDashboardReady) add("SSH Port 22")
+                        if (node.isDashboardReady) {
+                            if (node.useHttps) add("HTTPS") else add("HTTP")
+                            if (node.isConfirmedDietPi) add("DietPi")
+                        } else {
+                            add("No Dashboard")
+                        }
                         if (isAlreadySaved) add("Saved")
                         if (isSelected) add("Active")
                     }
 
                     ServerCardItem(
                         title = if (isAlreadySaved && matched != null) matched.nickname else node.name,
-                        subtitle = formattedUrl,
+                        subtitle = subtitleText,
                         isSelected = isSelected,
                         badges = badges,
                         icon = if (node.isDashboardReady) Icons.Default.Dns else Icons.Default.Terminal,
@@ -401,19 +424,49 @@ fun ServerSelectorSheet(
                                 .padding(20.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = "No saved DietPi servers yet",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Button(
-                                onClick = { showAddDialog = true },
-                                modifier = Modifier.testTag("add_first_server_button")
-                            ) {
-                                Icon(Icons.Default.Add, contentDescription = null)
-                                Spacer(modifier = Modifier.width(6.dp))
-                                Text("Add DietPi Server")
+                            if (isScanningNetwork) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(28.dp),
+                                    strokeWidth = 2.5.dp,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Text(
+                                    text = "Auto-searching local network for DietPi nodes...",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    fontWeight = FontWeight.Medium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    text = scanStatus,
+                                    style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace, fontSize = 11.sp),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.padding(top = 4.dp)
+                                )
+                            } else {
+                                Text(
+                                    text = if (discoveredNodes.isEmpty()) "No DietPi servers saved or found" else "No saved DietPi servers yet",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                Spacer(modifier = Modifier.height(12.dp))
+                                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    OutlinedButton(
+                                        onClick = { onStartScan(null) }
+                                    ) {
+                                        Icon(Icons.Default.Radar, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(6.dp))
+                                        Text("Search Again")
+                                    }
+                                    Button(
+                                        onClick = { showAddDialog = true },
+                                        modifier = Modifier.testTag("add_first_server_button")
+                                    ) {
+                                        Icon(Icons.Default.Add, contentDescription = null)
+                                        Spacer(modifier = Modifier.width(6.dp))
+                                        Text("Add Manually")
+                                    }
+                                }
                             }
                         }
                     }
@@ -553,7 +606,12 @@ fun ServerFormDialog(
 ) {
     val isEditing = server != null
 
-    var nickname by remember { mutableStateOf(server?.nickname ?: (initialNickname ?: (if (!initialHost.isNullOrBlank()) "DietPi ($initialHost)" else "DietPi Server"))) }
+    val defaultNickname = when {
+        !initialNickname.isNullOrBlank() -> initialNickname
+        !initialHost.isNullOrBlank() -> if (initialHost.contains("dietpi", ignoreCase = true)) "DietPi ($initialHost)" else "Server ($initialHost)"
+        else -> "DietPi Server"
+    }
+    var nickname by remember { mutableStateOf(server?.nickname ?: defaultNickname) }
     var hostInput by remember { mutableStateOf(server?.host ?: (initialHost ?: "192.168.1.100")) }
     var portInput by remember { mutableStateOf(server?.port?.toString() ?: (initialPort?.toString() ?: "5252")) }
     var password by remember { mutableStateOf(server?.password ?: "") }
@@ -592,7 +650,7 @@ fun ServerFormDialog(
 
         return ServerEntity(
             id = server?.id ?: 0L,
-            nickname = nickname.trim().ifEmpty { "DietPi" },
+            nickname = nickname.trim().ifEmpty { if (cleanHost.contains("dietpi", ignoreCase = true)) "DietPi" else "Server" },
             host = cleanHost.ifEmpty { "192.168.1.100" },
             port = detectedPort,
             useHttps = detectedHttps,

@@ -48,8 +48,6 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.R
 import com.example.data.local.ServerEntity
-import com.example.data.model.AutoRetryState
-import com.example.data.model.ConnectionState
 import com.example.data.model.TerminalStatus
 import com.example.ui.theme.*
 import com.example.ui.viewmodel.DietPiViewModel
@@ -106,11 +104,6 @@ fun TerminalScreen(
     onToggleToolbar: () -> Unit = {},
     isInitializing: Boolean = false,
     onToolbarHeightChanged: (Dp) -> Unit = {},
-    connectionState: ConnectionState = ConnectionState.Idle,
-    autoRetryState: AutoRetryState? = null,
-    onRetryConnection: () -> Unit = {},
-    onCancelAutoRetry: () -> Unit = {},
-    onEditServer: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val terminalStatus by viewModel.terminalStatus.collectAsStateWithLifecycle()
@@ -385,76 +378,7 @@ fun TerminalScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // 1. Node Connection / Unreachable Banner
-                if (connectionState is ConnectionState.Error) {
-                    Surface(
-                        shape = RoundedCornerShape(20.dp),
-                        color = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                        shadowElevation = 4.dp,
-                        modifier = Modifier.testTag("terminal_node_offline_banner")
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            modifier = Modifier.padding(horizontal = 14.dp, vertical = 6.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.CloudOff,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(15.dp)
-                            )
-                            val statusMsg = when {
-                                autoRetryState != null && autoRetryState.isRetryingNow -> "Connecting node..."
-                                autoRetryState != null && !autoRetryState.isPaused && autoRetryState.secondsRemaining > 0 ->
-                                    "Node offline · Retry in ${autoRetryState.secondsRemaining}s"
-                                else -> "Node offline"
-                            }
-                            Text(
-                                text = statusMsg,
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                            if (autoRetryState != null && autoRetryState.isRetryingNow) {
-                                CircularProgressIndicator(
-                                    strokeWidth = 2.dp,
-                                    color = MaterialTheme.colorScheme.error,
-                                    modifier = Modifier.size(12.dp)
-                                )
-                            } else {
-                                Text(
-                                    text = "Retry",
-                                    fontSize = 12.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = MaterialTheme.colorScheme.error,
-                                    modifier = Modifier
-                                        .clip(RoundedCornerShape(4.dp))
-                                        .clickable(onClick = onRetryConnection)
-                                        .padding(horizontal = 4.dp, vertical = 2.dp)
-                                )
-                            }
-                            Box(
-                                modifier = Modifier
-                                    .width(1.dp)
-                                    .height(13.dp)
-                                    .background(MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.3f))
-                            )
-                            Text(
-                                text = "Edit",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(4.dp))
-                                    .clickable(onClick = onEditServer)
-                                    .padding(horizontal = 4.dp, vertical = 2.dp)
-                            )
-                        }
-                    }
-                }
-
-                // 2. Terminal Session Disconnected / Error Banner
+                // Terminal Session Disconnected / Error Banner
                 if ((hasEverConnected && terminalStatus is TerminalStatus.Disconnected) || terminalStatus is TerminalStatus.Error || isReconnectingSession) {
                     Surface(
                         shape = RoundedCornerShape(20.dp),

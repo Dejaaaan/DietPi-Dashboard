@@ -34,11 +34,8 @@ import coil.compose.SubcomposeAsyncImage
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import com.example.data.local.ServerEntity
-import com.example.data.model.AutoRetryState
-import com.example.data.model.ConnectionState
 import com.example.data.model.SoftwareItem
 import com.example.ui.components.CompactFilterDropdown
-import com.example.ui.components.ConnectionErrorCard
 import com.example.ui.components.ListSkeleton
 import com.example.ui.components.NoServerSelectedView
 
@@ -50,12 +47,7 @@ fun SoftwareScreen(
     activeServer: ServerEntity? = null,
     onOpenServerSelector: () -> Unit = {},
     isLoading: Boolean = false,
-    autoRetryState: AutoRetryState? = null,
-    onCancelAutoRetry: () -> Unit = {},
     isInitializing: Boolean = false,
-    connectionState: ConnectionState = ConnectionState.Idle,
-    onRetryConnection: () -> Unit = {},
-    onEditServer: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     if (activeServer == null) {
@@ -135,18 +127,6 @@ fun SoftwareScreen(
             .padding(horizontal = 16.dp)
     ) {
         Spacer(modifier = Modifier.height(8.dp))
-
-        if (connectionState is ConnectionState.Error) {
-            ConnectionErrorCard(
-                connectionState = connectionState,
-                onRetryConnection = onRetryConnection,
-                onEditServer = onEditServer,
-                isRetrying = isLoading,
-                autoRetryState = autoRetryState,
-                onCancelAutoRetry = onCancelAutoRetry,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
-        }
 
         // Search bar
         OutlinedTextField(
