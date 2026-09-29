@@ -57,6 +57,7 @@ class DietPiClient(val server: ServerEntity) {
 
     private fun createOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
+            .dns(UniversalSmartDns)
             .cookieJar(cookieJar)
             .connectTimeout(6, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
@@ -265,9 +266,15 @@ class DietPiClient(val server: ServerEntity) {
         } catch (e: java.net.ConnectException) {
             Result.failure(Exception("Connection Refused (${server.host}:${server.port}). DietPi-Dashboard may not be running, or port ${server.port} is blocked by firewall."))
         } catch (e: java.net.SocketTimeoutException) {
-            Result.failure(Exception("Connection Timed Out connecting to ${server.baseUrl}. Verify that your phone is on the same Wi-Fi subnet (192.168.1.x), that 'Use HTTPS' is enabled, and port ${server.port} is reachable."))
+            Result.failure(Exception("Connection Timed Out connecting to ${server.baseUrl}. Verify that the host is online, reachable from your network/VPN, and port ${server.port} is open."))
         } catch (e: java.net.UnknownHostException) {
-            Result.failure(Exception("Unknown Host '${server.host}'. DNS could not resolve this domain. Use your Pi's IP address (192.168.1.39)."))
+            val isTailscale = server.host.endsWith(".ts.net", ignoreCase = true)
+            val msg = if (isTailscale) {
+                "Unknown Host '${server.host}'. Tailscale MagicDNS could not be resolved. Ensure Tailscale VPN is Connected on this device, check that Android 'Private DNS' is set to Automatic/Off, or try the Tailscale 100.x.y.z IP address directly."
+            } else {
+                "Unknown Host '${server.host}'. DNS could not resolve this domain name. Verify the domain or enter the device's IP address directly."
+            }
+            Result.failure(Exception(msg))
         } catch (e: javax.net.ssl.SSLException) {
             Result.failure(Exception("SSL/TLS Handshake Failed for ${server.baseUrl}. Ensure self-signed certificates are accepted or toggle HTTPS."))
         } catch (e: Exception) {

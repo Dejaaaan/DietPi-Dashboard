@@ -13,6 +13,7 @@ class DietPiApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         configureSoftwareRendering()
+        com.example.data.remote.UniversalSmartDns.init(this)
     }
 
     private fun configureSoftwareRendering() {

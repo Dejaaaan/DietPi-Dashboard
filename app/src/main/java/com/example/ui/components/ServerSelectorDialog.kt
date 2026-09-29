@@ -227,8 +227,8 @@ fun ServerSelectorSheet(
                                     OutlinedTextField(
                                         value = customSubnetText,
                                         onValueChange = { customSubnetText = it },
-                                        label = { Text("Subnet (e.g. 192.168.1)") },
-                                        placeholder = { Text("192.168.1") },
+                                        label = { Text("Subnet (e.g. 192.168.1 or 10.0.0)") },
+                                        placeholder = { Text("e.g. 192.168.1") },
                                         singleLine = true,
                                         modifier = Modifier.weight(1f),
                                         textStyle = MaterialTheme.typography.bodySmall
@@ -608,11 +608,11 @@ fun ServerFormDialog(
 
     val defaultNickname = when {
         !initialNickname.isNullOrBlank() -> initialNickname
-        !initialHost.isNullOrBlank() -> if (initialHost.contains("dietpi", ignoreCase = true)) "DietPi ($initialHost)" else "Server ($initialHost)"
-        else -> "DietPi Server"
+        !initialHost.isNullOrBlank() -> initialHost
+        else -> ""
     }
     var nickname by remember { mutableStateOf(server?.nickname ?: defaultNickname) }
-    var hostInput by remember { mutableStateOf(server?.host ?: (initialHost ?: "192.168.1.100")) }
+    var hostInput by remember { mutableStateOf(server?.host ?: (initialHost ?: "")) }
     var portInput by remember { mutableStateOf(server?.port?.toString() ?: (initialPort?.toString() ?: "5252")) }
     var password by remember { mutableStateOf(server?.password ?: "") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -629,7 +629,7 @@ fun ServerFormDialog(
         var detectedHttps = useHttps
         var detectedPort = portInput.toIntOrNull() ?: 5252
 
-        // Smart parser if user pasted full URL (e.g. https://192.168.1.50:5252/)
+        // Smart parser if user pasted full URL (e.g. https://domain.ts.net:5252/)
         if (cleanHost.startsWith("https://", ignoreCase = true)) {
             detectedHttps = true
             cleanHost = cleanHost.substringAfter("://")
@@ -650,8 +650,8 @@ fun ServerFormDialog(
 
         return ServerEntity(
             id = server?.id ?: 0L,
-            nickname = nickname.trim().ifEmpty { if (cleanHost.contains("dietpi", ignoreCase = true)) "DietPi" else "Server" },
-            host = cleanHost.ifEmpty { "192.168.1.100" },
+            nickname = nickname.trim().ifEmpty { cleanHost.ifEmpty { "DietPi" } },
+            host = cleanHost,
             port = detectedPort,
             useHttps = detectedHttps,
             password = password,
@@ -678,7 +678,15 @@ fun ServerFormDialog(
                     value = nickname,
                     onValueChange = { nickname = it },
                     label = { Text("Server Nickname") },
+                    placeholder = { Text(if (hostInput.isNotEmpty()) hostInput else "e.g. My Server") },
                     singleLine = true,
+                    trailingIcon = {
+                        if (nickname.isNotEmpty()) {
+                            IconButton(onClick = { nickname = "" }) {
+                                Icon(Icons.Default.Clear, contentDescription = "Clear Nickname", modifier = Modifier.size(18.dp))
+                            }
+                        }
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("server_nickname_input")
@@ -709,7 +717,7 @@ fun ServerFormDialog(
                         hostInput = cleaned
                     },
                     label = { Text("Host IP / Domain") },
-                    placeholder = { Text("192.168.1.50 or dietpi.local") },
+                    placeholder = { Text("e.g. dietpi.local, 100.x.y.z, or .ts.net") },
                     singleLine = true,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -799,7 +807,7 @@ fun ServerFormDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag("test_connection_button"),
-                    enabled = !isTesting
+                    enabled = !isTesting && hostInput.isNotBlank()
                 ) {
                     if (isTesting) {
                         CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
@@ -904,6 +912,7 @@ fun ServerFormDialog(
                     val candidate = buildCandidate()
                     onSave(candidate)
                 },
+                enabled = hostInput.isNotBlank(),
                 modifier = Modifier.testTag("save_server_button")
             ) {
                 Text(if (isEditing) "Save Changes" else "Add Server")

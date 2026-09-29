@@ -536,8 +536,12 @@ fun TerminalScreen(
                             // Drawer Content
                             when (activeDrawer) {
                                 ExpandableDrawer.DIETPI -> {
+                                    val dietpiScrollState = rememberScrollState()
                                     Column(
-                                        modifier = Modifier.fillMaxWidth(),
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .heightIn(max = 175.dp)
+                                            .verticalScroll(dietpiScrollState),
                                         verticalArrangement = Arrangement.spacedBy(3.dp)
                                     ) {
                                         val dietpiRows = listOf(
@@ -550,11 +554,34 @@ fun TerminalScreen(
                                                 Pair("dietpi-services", "dietpi-services")
                                             ),
                                             listOf(
-                                                Pair("dietpi-drive_manager", "dietpi-drive_manager"),
-                                                Pair("dietpi-update", "dietpi-update")
+                                                Pair("dietpi-update", "dietpi-update"),
+                                                Pair("dietpi-drive_manager", "dietpi-drive_manager")
                                             ),
                                             listOf(
-                                                Pair("dietpi-explorer", "dietpi-explorer"),
+                                                Pair("dietpi-backup", "dietpi-backup"),
+                                                Pair("dietpi-sync", "dietpi-sync")
+                                            ),
+                                            listOf(
+                                                Pair("dietpi-cleaner", "dietpi-cleaner"),
+                                                Pair("dietpi-explorer", "dietpi-explorer")
+                                            ),
+                                            listOf(
+                                                Pair("dietpi-cron", "dietpi-cron"),
+                                                Pair("dietpi-autostart", "dietpi-autostart")
+                                            ),
+                                            listOf(
+                                                Pair("dietpi-bugreport", "dietpi-bugreport"),
+                                                Pair("dietpi-banner", "dietpi-banner")
+                                            ),
+                                            listOf(
+                                                Pair("dietpi-survey", "dietpi-survey"),
+                                                Pair("dietpi-cloudshell", "dietpi-cloudshell")
+                                            ),
+                                            listOf(
+                                                Pair("dietpi-vpn", "dietpi-vpn"),
+                                                Pair("dietpi-led_control", "dietpi-led_control")
+                                            ),
+                                            listOf(
                                                 Pair("dietpi-", "dietpi-...")
                                             )
                                         )

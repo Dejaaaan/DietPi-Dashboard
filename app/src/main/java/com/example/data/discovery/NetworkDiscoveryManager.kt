@@ -66,6 +66,7 @@ class NetworkDiscoveryManager(private val context: Context) {
 
     private fun createLenientOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
+            .dns(com.example.data.remote.UniversalSmartDns)
             .connectTimeout(2000, TimeUnit.MILLISECONDS)
             .readTimeout(2000, TimeUnit.MILLISECONDS)
             .followRedirects(true)
@@ -133,8 +134,7 @@ class NetworkDiscoveryManager(private val context: Context) {
                         scanSubnet(subnet)
                     }
                 } else {
-                    _scanStatus.value = "No local subnet found; checking default 192.168.1.x..."
-                    scanSubnet("192.168.1")
+                    _scanStatus.value = "No local Wi-Fi or Ethernet subnet detected."
                 }
 
                 // Give mDNS services a short window to resolve
@@ -555,12 +555,6 @@ class NetworkDiscoveryManager(private val context: Context) {
                 }
             }
         } catch (_: Exception) {}
-
-        // 3. Common fallback subnets if none detected
-        if (subnets.isEmpty()) {
-            subnets.add("192.168.1")
-            subnets.add("192.168.0")
-        }
 
         return subnets.toList()
     }
